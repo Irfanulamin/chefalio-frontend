@@ -15,21 +15,22 @@ import {
 } from "@/components/ui/drawer";
 
 const navLinks = [
-  { label: "Recipes", href: "#" },
+  { label: "Home", href: "#" },
+  { label: "Features", href: "#" },
   { label: "About", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "FAQ", href: "#" },
 ];
 
 export const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <div className="sticky top-0 z-50">
+    <div className="sticky top-0 z-50 backdrop-blur-sm">
       <motion.div
         initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex justify-center items-center py-2.5 dark:bg-white bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
+        className="flex justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
       >
         <p>Get your recipe ideas from the top chefs!</p>
         <motion.span
@@ -48,13 +49,12 @@ export const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <motion.h2
-              whileHover={{ scale: 1.04 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="text-primary text-2xl font-extrabold tracking-tight cursor-pointer select-none"
             >
               Chefalio
             </motion.h2>
-            <nav className="hidden md:flex gap-7 text-muted-foreground items-center">
+            <nav className="hidden lg:flex gap-x-7 gap-y-4 text-muted-foreground items-center">
               <ToggleThemeButton />
               {navLinks.map((link, i) => (
                 <motion.a
@@ -83,7 +83,7 @@ export const Header = () => {
               </motion.div>
             </nav>
 
-            <div className="md:hidden flex items-center gap-3">
+            <div className="lg:hidden flex items-center gap-3">
               <ToggleThemeButton />
               <Drawer
                 open={drawerOpen}
@@ -123,7 +123,7 @@ export const Header = () => {
                   </motion.button>
                 </DrawerTrigger>
 
-                <DrawerContent className="px-0 pb-8">
+                <DrawerContent className="px-0 pb-8 bg-white/85 dark:bg-black/85 backdrop-blur-sm">
                   <DrawerHeader className="px-6 pt-6 pb-2">
                     <DrawerTitle className="text-2xl font-extrabold tracking-tight text-primary">
                       Chefalio
