@@ -135,15 +135,14 @@ export const Header = () => {
                       <motion.a
                         key={link.label}
                         href={link.href}
-                        initial={{ opacity: 0, x: -18 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{
-                          delay: i * 0.07,
-                          duration: 0.3,
-                          ease: "easeOut",
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const section = document.querySelector(link.href);
+                          if (section)
+                            section.scrollIntoView({ behavior: "smooth" });
+                          setDrawerOpen(false);
                         }}
-                        onClick={() => setDrawerOpen(false)}
-                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors"
+                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors cursor-pointer"
                       >
                         {link.label}
                       </motion.a>
