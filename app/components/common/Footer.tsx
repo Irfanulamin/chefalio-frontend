@@ -19,12 +19,9 @@ export const Footer = () => {
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         className="w-full max-w-3xl rounded-2xl border border-black/8 dark:border-white/8 bg-white/60 dark:bg-black/40 backdrop-blur-sm px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-6"
       >
-        {/* Brand */}
         <span className="text-primary text-2xl font-extrabold tracking-tight cursor-pointer select-none">
           Chefalio
         </span>
-
-        {/* Nav links */}
         <nav className="flex items-center gap-x-6">
           {navLinks.map((link, i) => (
             <motion.a
@@ -41,8 +38,6 @@ export const Footer = () => {
             </motion.a>
           ))}
         </nav>
-
-        {/* Copyright */}
         <p className="text-xs text-black/35 dark:text-white/35 whitespace-nowrap">
           © {new Date().getFullYear()} Chefalio. All rights reserved.
         </p>

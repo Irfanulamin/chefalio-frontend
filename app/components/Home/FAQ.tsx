@@ -41,7 +41,6 @@ export const FAQ = () => {
   return (
     <section className="min-h-screen flex items-center justify-center px-6 py-24 overflow-hidden">
       <div className="w-full max-w-300">
-        {/* Heading — animate when scrolled into view */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -61,10 +60,7 @@ export const FAQ = () => {
             Contact our support team — we're here to help!
           </p>
         </motion.div>
-
-        {/* Body row */}
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-24">
-          {/* Image — sticky/centered on the left */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -77,11 +73,9 @@ export const FAQ = () => {
               alt="FAQ illustration"
               width={260}
               height={260}
-              className="object-contain w-[200px] lg:w-[260px] h-auto rounded-2xl"
+              className="object-contain w-50 lg:w-65 h-auto rounded-2xl"
             />
           </motion.div>
-
-          {/* Accordion list */}
           <div className="flex flex-col gap-2.5 flex-1">
             {QnA.map((qa, i) => {
               const isOpen = openIndex === i;

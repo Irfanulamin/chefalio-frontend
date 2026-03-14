@@ -80,7 +80,6 @@ export const Banner = () => {
       transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
       className="relative pt-2 md:pt-8 pb-10 md:pb-20 bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#E6F3B8,#fff_66%)] dark:bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#C8E17A,#000_66%)] overflow-hidden"
     >
-      {/* Subtle ambient glow that pulses */}
       <motion.div
         className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-primary/10 blur-3xl pointer-events-none"
         animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.65, 0.4] }}
@@ -99,7 +98,6 @@ export const Banner = () => {
 
       <div className="container mx-auto px-4">
         <div className="md:flex items-center">
-          {/* Left Content */}
           <motion.div
             className="md:w-280"
             variants={containerVariants}
@@ -110,7 +108,6 @@ export const Banner = () => {
               opacity: textOpacity,
             }}
           >
-            {/* Eyebrow tag */}
             <motion.div variants={slideUp} className="mb-4">
               <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
                 <motion.span
@@ -160,8 +157,6 @@ export const Banner = () => {
                 </motion.span>
               </Button>
             </motion.div>
-
-            {/* Social proof */}
             <motion.div
               variants={slideUp}
               className="mt-8 flex items-center gap-3"
@@ -196,8 +191,6 @@ export const Banner = () => {
               </motion.p>
             </motion.div>
           </motion.div>
-
-          {/* Right — Star image with parallax + float */}
           <motion.div
             className="hidden md:block mt-20 md:mt-0 md:h-162.5 relative"
             initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
@@ -209,14 +202,11 @@ export const Banner = () => {
             }}
             style={{ x: starX, opacity: starOpacity, scale: starScale }}
           >
-            {/* Glow halo behind star */}
             <motion.div
               className="absolute inset-0 rounded-full bg-primary/20 blur-3xl scale-75 -z-10"
               animate={{ opacity: [0.3, 0.6, 0.3], scale: [0.7, 0.85, 0.7] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />
-
-            {/* Floating star — combined scroll parallax + ambient float */}
             <motion.div
               style={{
                 y: floatYSpring,
@@ -231,8 +221,6 @@ export const Banner = () => {
                 className="blur-[1.5px] hover:blur-[3px] transition-all ease-in delay-300"
               />
             </motion.div>
-
-            {/* Orbiting dot */}
             <motion.div
               className="absolute top-10 right-10 w-3 h-3 rounded-full bg-primary shadow-lg shadow-accent hover:blur-sm transition-all"
               animate={{

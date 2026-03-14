@@ -4,12 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useInView, cubicBezier } from "framer-motion";
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 36 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, ease: cubicBezier(0.22, 1, 0.36, 1), delay },
-});
-
 function StatCard({
   number,
   label,
