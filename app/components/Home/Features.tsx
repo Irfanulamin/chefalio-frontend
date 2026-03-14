@@ -100,8 +100,9 @@ export const Features = () => {
 
   return (
     <motion.div
+      id="features"
       ref={ref}
-      className="container mx-auto px-4 py-20"
+      className="container mx-auto px-4 py-10 md:py-20"
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
     >
@@ -116,7 +117,7 @@ export const Features = () => {
       >
         <motion.h2
           variants={fadeUp}
-          className="text-7xl tracking-tighter font-bold bg-linear-to-b from-black to-primary dark:from-white dark:to-primary bg-clip-text text-transparent"
+          className="text-5xl md:text-7xl tracking-tighter font-bold bg-linear-to-b from-black to-primary dark:from-white dark:to-primary bg-clip-text text-transparent"
         >
           Discover What Chefalio Can Do
         </motion.h2>

@@ -74,6 +74,7 @@ export const Banner = () => {
 
   return (
     <motion.section
+      id="banner"
       ref={sectionRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -192,7 +193,7 @@ export const Banner = () => {
             </motion.div>
           </motion.div>
           <motion.div
-            className="hidden md:block mt-20 md:mt-0 md:h-162.5 relative"
+            className=" mt-20 md:mt-0 md:h-162.5 relative"
             initial={{ opacity: 0, scale: 0.85, filter: "blur(12px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
             transition={{

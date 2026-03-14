@@ -39,7 +39,10 @@ export const FAQ = () => {
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i);
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-6 py-24 overflow-hidden">
+    <section
+      id="faq"
+      className="min-h-screen flex items-center justify-center px-6 py-12 md:py-24 overflow-hidden"
+    >
       <div className="w-full max-w-300">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -48,7 +51,7 @@ export const FAQ = () => {
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16 text-center"
         >
-          <h2 className="text-7xl font-bold text-primary leading-[1.15] tracking-tight mb-4">
+          <h2 className="text-5xl md:text-7xl font-bold text-primary leading-[1.15] tracking-tight mb-4">
             Questions, <br />
             <em className="not-italic text-black dark:text-white">
               Answered honestly.

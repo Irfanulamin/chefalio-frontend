@@ -71,9 +71,9 @@ export const AboutUs = () => {
   ];
 
   return (
-    <div className="w-full overflow-hidden">
+    <div id="about" className="w-full overflow-hidden">
       <section
-        className="relative mx-auto max-w-6xl px-6 pt-28 pb-24"
+        className="relative mx-auto max-w-6xl px-6 pt-14 md:pt-28 pb-12 md:pb-24"
         ref={passionRef}
       >
         <motion.h1
