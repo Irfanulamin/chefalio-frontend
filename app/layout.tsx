@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, Geist } from "next/font/google";
 import "./globals.css";
+import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
@@ -23,9 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={twMerge(dmSans.className, "antialiased")}
+        suppressHydrationWarning
       >
         {children}
       </body>
