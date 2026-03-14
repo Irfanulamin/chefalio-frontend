@@ -1,0 +1,178 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRightIcon, ListIcon, XIcon } from "@phosphor-icons/react";
+import { ToggleThemeButton } from "./ToggleThemeButton";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DrawerClose,
+} from "@/components/ui/drawer";
+
+const navLinks = [
+  { label: "Recipes", href: "#" },
+  { label: "About", href: "#" },
+  { label: "Contact", href: "#" },
+];
+
+export const Header = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  return (
+    <div className="sticky top-0 z-50">
+      <motion.div
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="flex justify-center items-center py-2.5 dark:bg-white bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
+      >
+        <p>Get your recipe ideas from the top chefs!</p>
+        <motion.span
+          animate={{ x: [0, 4, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+        >
+          <ArrowRightIcon size={16} />
+        </motion.span>
+      </motion.div>
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+        className="py-4 border-b border-border/40 bg-background/80 backdrop-blur-xl supports-backdrop-filter:bg-background/60"
+      >
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <motion.h2
+              whileHover={{ scale: 1.04 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="text-primary text-2xl font-extrabold tracking-tight cursor-pointer select-none"
+            >
+              Chefalio
+            </motion.h2>
+            <nav className="hidden md:flex gap-7 text-muted-foreground items-center">
+              <ToggleThemeButton />
+              {navLinks.map((link, i) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.07, duration: 0.35 }}
+                  whileHover={{ y: -1 }}
+                  className="text-sm font-medium relative group transition-colors hover:text-foreground"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
+                </motion.a>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.42, duration: 0.35 }}
+                className="flex items-center gap-2"
+              >
+                <Button variant="outline" size="lg">
+                  Login
+                </Button>
+                <Button size="lg">Register</Button>
+              </motion.div>
+            </nav>
+
+            <div className="md:hidden flex items-center gap-3">
+              <ToggleThemeButton />
+              <Drawer
+                open={drawerOpen}
+                onOpenChange={setDrawerOpen}
+                direction="left"
+              >
+                <DrawerTrigger asChild>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.08 }}
+                    className="p-1.5 rounded-md hover:bg-accent transition-colors"
+                    aria-label="Open menu"
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {drawerOpen ? (
+                        <motion.span
+                          key="close"
+                          initial={{ rotate: -90, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: 90, opacity: 0 }}
+                          transition={{ duration: 0.18 }}
+                        >
+                          <XIcon size={26} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="menu"
+                          initial={{ rotate: 90, opacity: 0 }}
+                          animate={{ rotate: 0, opacity: 1 }}
+                          exit={{ rotate: -90, opacity: 0 }}
+                          transition={{ duration: 0.18 }}
+                        >
+                          <ListIcon size={26} />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                </DrawerTrigger>
+
+                <DrawerContent className="px-0 pb-8">
+                  <DrawerHeader className="px-6 pt-6 pb-2">
+                    <DrawerTitle className="text-2xl font-extrabold tracking-tight text-primary">
+                      Chefalio
+                    </DrawerTitle>
+                  </DrawerHeader>
+
+                  <nav className="flex flex-col px-6 mt-2 gap-1">
+                    {navLinks.map((link, i) => (
+                      <motion.a
+                        key={link.label}
+                        href={link.href}
+                        initial={{ opacity: 0, x: -18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: i * 0.07,
+                          duration: 0.3,
+                          ease: "easeOut",
+                        }}
+                        onClick={() => setDrawerOpen(false)}
+                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors"
+                      >
+                        {link.label}
+                      </motion.a>
+                    ))}
+                  </nav>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.28, duration: 0.3 }}
+                    className="flex flex-col gap-3 px-6 mt-6"
+                  >
+                    <DrawerClose asChild>
+                      <Button variant="outline" size="lg" className="w-full">
+                        Login
+                      </Button>
+                    </DrawerClose>
+                    <DrawerClose asChild>
+                      <Button size="lg" className="w-full">
+                        Register
+                      </Button>
+                    </DrawerClose>
+                  </motion.div>
+                </DrawerContent>
+              </Drawer>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
