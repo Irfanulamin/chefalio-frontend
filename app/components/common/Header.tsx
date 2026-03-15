@@ -23,23 +23,43 @@ const navLinks = [
 
 export const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [bannerVisible, setBannerVisible] = useState(true);
 
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm">
-      <motion.div
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="flex justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
-      >
-        <p>Get your recipe ideas from the top chefs!</p>
-        <motion.span
-          animate={{ x: [0, 4, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-        >
-          <ArrowRightIcon size={16} />
-        </motion.span>
-      </motion.div>
+      <AnimatePresence>
+        {bannerVisible && (
+          <motion.div
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -40, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative flex justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
+          >
+            <p>Get your recipe ideas from the top chefs!</p>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{
+                repeat: Infinity,
+                duration: 1.5,
+                ease: "easeInOut",
+              }}
+            >
+              <ArrowRightIcon size={16} />
+            </motion.span>
+
+            <motion.button
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setBannerVisible(false)}
+              className="absolute right-4 p-0.5 rounded-full opacity-70 hover:opacity-100 transition-opacity"
+              aria-label="Dismiss banner"
+            >
+              <XIcon size={15} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -131,21 +151,23 @@ export const Header = () => {
                   </DrawerHeader>
 
                   <nav className="flex flex-col px-6 mt-2 gap-1">
-                    {navLinks.map((link, i) => (
-                      <motion.a
-                        key={link.label}
-                        href={link.href}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          const section = document.querySelector(link.href);
-                          if (section)
-                            section.scrollIntoView({ behavior: "smooth" });
-                          setDrawerOpen(false);
-                        }}
-                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors cursor-pointer"
-                      >
-                        {link.label}
-                      </motion.a>
+                    {navLinks.map((link) => (
+                      <DrawerClose asChild key={link.label}>
+                        <motion.a
+                          href={link.href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setTimeout(() => {
+                              const section = document.querySelector(link.href);
+                              if (section)
+                                section.scrollIntoView({ behavior: "smooth" });
+                            }, 300);
+                          }}
+                          className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors cursor-pointer"
+                        >
+                          {link.label}
+                        </motion.a>
+                      </DrawerClose>
                     ))}
                   </nav>
 
