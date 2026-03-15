@@ -71,7 +71,7 @@ function SheetContent({
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
             <Button
-              variant="default"
+              variant="transparent"
               className="absolute top-3 right-3"
               size="icon-sm"
             >
