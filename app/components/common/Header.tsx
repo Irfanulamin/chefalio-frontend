@@ -6,23 +6,23 @@ import { ArrowRightIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 import { ToggleThemeButton } from "./ToggleThemeButton";
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  DrawerClose,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 const navLinks = [
-  { label: "Home", href: "#banner" },
+  { label: "Home", href: "/" },
   { label: "Features", href: "#features" },
   { label: "About", href: "#about" },
   { label: "FAQ", href: "#faq" },
 ];
 
 export const Header = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
 
   return (
@@ -34,9 +34,11 @@ export const Header = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -40, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative flex justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
+            className="relative flex flex-col sm:flex-row justify-center sm:justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
           >
-            <p>Get your recipe ideas from the top chefs!</p>
+            <p className="text-center sm:text-left">
+              Get your recipe ideas from the top chefs!
+            </p>
             <motion.span
               animate={{ x: [0, 4, 0] }}
               transition={{
@@ -44,6 +46,7 @@ export const Header = () => {
                 duration: 1.5,
                 ease: "easeInOut",
               }}
+              className="mt-1 sm:mt-0"
             >
               <ArrowRightIcon size={16} />
             </motion.span>
@@ -52,7 +55,7 @@ export const Header = () => {
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setBannerVisible(false)}
-              className="absolute right-4 p-0.5 rounded-full opacity-70 hover:opacity-100 transition-opacity"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-0.5 rounded-full opacity-70 hover:opacity-100 transition-opacity"
               aria-label="Dismiss banner"
             >
               <XIcon size={15} />
@@ -105,12 +108,8 @@ export const Header = () => {
 
             <div className="lg:hidden flex items-center gap-3">
               <ToggleThemeButton />
-              <Drawer
-                open={drawerOpen}
-                onOpenChange={setDrawerOpen}
-                direction="left"
-              >
-                <DrawerTrigger asChild>
+              <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
+                <SheetTrigger asChild>
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     whileHover={{ scale: 1.08 }}
@@ -118,7 +117,7 @@ export const Header = () => {
                     aria-label="Open menu"
                   >
                     <AnimatePresence mode="wait" initial={false}>
-                      {drawerOpen ? (
+                      {sheetOpen ? (
                         <motion.span
                           key="close"
                           initial={{ rotate: -90, opacity: 0 }}
@@ -141,25 +140,35 @@ export const Header = () => {
                       )}
                     </AnimatePresence>
                   </motion.button>
-                </DrawerTrigger>
+                </SheetTrigger>
 
-                <DrawerContent className="px-0 pb-8 bg-white/85 dark:bg-black/85 backdrop-blur-sm">
-                  <DrawerHeader className="px-6 pt-6 pb-2">
-                    <DrawerTitle className="text-2xl font-extrabold tracking-tight text-primary">
+                <SheetContent
+                  side="left"
+                  className="px-0 pb-8 bg-white/85 dark:bg-black/85 backdrop-blur-sm"
+                >
+                  <SheetHeader className="px-6 pt-6 pb-2">
+                    <SheetTitle className="text-2xl font-extrabold tracking-tight text-primary">
                       Chefalio
-                    </DrawerTitle>
-                  </DrawerHeader>
+                    </SheetTitle>
+                  </SheetHeader>
 
                   <nav className="flex flex-col px-6 mt-2 gap-1">
-                    {navLinks.map((link) => (
-                      <DrawerClose asChild key={link.label}>
-                        <a
-                          href={link.href}
-                          className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors cursor-pointer"
-                        >
-                          {link.label}
-                        </a>
-                      </DrawerClose>
+                    {navLinks.map((link, i) => (
+                      <motion.a
+                        key={link.label}
+                        href={link.href}
+                        initial={{ opacity: 0, x: -18 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: i * 0.07,
+                          duration: 0.3,
+                          ease: "easeOut",
+                        }}
+                        onClick={() => setSheetOpen(false)}
+                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors"
+                      >
+                        {link.label}
+                      </motion.a>
                     ))}
                   </nav>
 
@@ -169,19 +178,19 @@ export const Header = () => {
                     transition={{ delay: 0.28, duration: 0.3 }}
                     className="flex flex-col gap-3 px-6 mt-6"
                   >
-                    <DrawerClose asChild>
+                    <SheetClose asChild>
                       <Button variant="outline" size="lg" className="w-full">
                         Login
                       </Button>
-                    </DrawerClose>
-                    <DrawerClose asChild>
+                    </SheetClose>
+                    <SheetClose asChild>
                       <Button size="lg" className="w-full">
                         Register
                       </Button>
-                    </DrawerClose>
+                    </SheetClose>
                   </motion.div>
-                </DrawerContent>
-              </Drawer>
+                </SheetContent>
+              </Sheet>
             </div>
           </div>
         </div>
