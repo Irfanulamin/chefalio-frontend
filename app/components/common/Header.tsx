@@ -153,20 +153,12 @@ export const Header = () => {
                   <nav className="flex flex-col px-6 mt-2 gap-1">
                     {navLinks.map((link) => (
                       <DrawerClose asChild key={link.label}>
-                        <motion.a
+                        <a
                           href={link.href}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setTimeout(() => {
-                              const section = document.querySelector(link.href);
-                              if (section)
-                                section.scrollIntoView({ behavior: "smooth" });
-                            }, 300);
-                          }}
                           className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors cursor-pointer"
                         >
                           {link.label}
-                        </motion.a>
+                        </a>
                       </DrawerClose>
                     ))}
                   </nav>
