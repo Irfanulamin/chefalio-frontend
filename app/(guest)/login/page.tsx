@@ -7,18 +7,16 @@ import Image from "next/image";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
 import * as z from "zod";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
+  const { login, isLoading } = useAuth();
+
   const loginSchema = z.object({
-    usernameOrEmail: z
-      .string()
-      .min(5, "Username or email must be at least 5 characters.")
-      .max(32, "Username or email must be at most 32 characters."),
-    password: z
-      .string()
-      .min(20, "Password must be at least 20 characters.")
-      .max(100, "Password must be at most 100 characters."),
+    usernameOrEmail: z.string(),
+    password: z.string(),
   });
+
   const form = useForm({
     defaultValues: {
       usernameOrEmail: "",
@@ -28,22 +26,21 @@ export default function LoginPage() {
       onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
-      toast("You submitted the following values:", {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-125 overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: "bottom-right",
-        classNames: {
-          content: "flex flex-col gap-2",
-        },
-        style: {
-          "--border-radius": "calc(var(--radius)  + 4px)",
-        } as React.CSSProperties,
-      });
+      try {
+        await login(value);
+        toast.success("Signed in successfully!", { position: "bottom-right" });
+      } catch (err: Error | unknown) {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Login failed. Please try again.";
+        toast.error(errorMessage, {
+          position: "bottom-right",
+        });
+      }
     },
   });
+
   const fieldDefinitions = [
     {
       name: "usernameOrEmail",
@@ -58,6 +55,7 @@ export default function LoginPage() {
       type: "password",
     },
   ];
+
   return (
     <div
       className="relative min-h-[90vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-white dark:bg-zinc-950 [--grid-color:rgba(0,0,0,0.12)] dark:[--grid-color:rgba(255,255,255,0.08)]"
@@ -69,11 +67,9 @@ export default function LoginPage() {
         backgroundSize: "50px 50px",
       }}
     >
-      {/* Top fade */}
       <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-10" />
-      {/* Bottom fade */}
       <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-white dark:from-zinc-950 to-transparent pointer-events-none z-10" />
-      {/* Outer glow layer */}
+
       <div className="relative">
         <div
           className="absolute -inset-1.5 rounded-[20px] blur-xl opacity-70"
@@ -83,8 +79,6 @@ export default function LoginPage() {
             animation: "spin 3s linear infinite",
           }}
         />
-
-        {/* Border beam wrapper (2px padding = border thickness) */}
         <div
           className="relative p-0.5 rounded-2xl"
           style={{
@@ -93,9 +87,7 @@ export default function LoginPage() {
             animation: "spin 3s linear infinite",
           }}
         >
-          {/* Card */}
           <div className="relative flex max-w-4xl bg-white dark:bg-zinc-950 rounded-[14px] overflow-hidden">
-            {/* Left — Image */}
             <div className="hidden md:flex w-1/2">
               <Image
                 src="/login.png"
@@ -106,14 +98,12 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* Right — Form */}
             <div className="flex w-full md:w-1/2 items-center justify-center p-8">
               <div className="w-full max-w-md space-y-6">
                 <div>
                   <h1 className="text-2xl font-semibold">Sign In</h1>
                   <p className="text-sm text-gray-500">
-                    Welcome back! Please enter your details to sign in to your
-                    account.
+                    Welcome back! Please enter your details to sign in.
                   </p>
                 </div>
 
@@ -135,8 +125,12 @@ export default function LoginPage() {
                     ))}
                   </FieldGroup>
 
-                  <Button type="submit" className="w-full rounded-lg py-5">
-                    Sign In
+                  <Button
+                    type="submit"
+                    className="w-full rounded-lg py-5"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
 
@@ -152,7 +146,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Keyframe + @property for conic-gradient animation */}
       <style>{`
         @property --angle {
           syntax: '<angle>';

@@ -13,6 +13,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
+import { useAuth } from "@/hooks/axios";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -21,9 +22,49 @@ const navLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
+// shared so both desktop and mobile render the same thing
+const AuthButtons = ({
+  fullWidth = false,
+  isLoading,
+  user,
+  logout,
+}: {
+  fullWidth?: boolean;
+  isLoading: boolean;
+  user: unknown;
+  logout: () => void;
+}) => {
+  if (isLoading) return null;
+
+  if (user) {
+    return (
+      <Button
+        variant="outline"
+        size="lg"
+        className={fullWidth ? "w-full" : ""}
+        onClick={() => logout()}
+      >
+        Logout
+      </Button>
+    );
+  }
+
+  return (
+    <>
+      <Button variant="outline" size="lg" className={fullWidth ? "w-full" : ""}>
+        Login
+      </Button>
+      <Button size="lg" className={fullWidth ? "w-full" : ""}>
+        Register
+      </Button>
+    </>
+  );
+};
+
 export const Header = () => {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
+  const { user, isLoading, logout } = useAuth(); // 👈
 
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm">
@@ -50,7 +91,6 @@ export const Header = () => {
             >
               <ArrowRightIcon size={16} />
             </motion.span>
-
             <motion.button
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.9 }}
@@ -63,6 +103,7 @@ export const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -77,6 +118,8 @@ export const Header = () => {
             >
               Chefalio
             </motion.h2>
+
+            {/* Desktop */}
             <nav className="hidden lg:flex gap-x-7 gap-y-4 text-muted-foreground items-center">
               <ToggleThemeButton />
               {navLinks.map((link, i) => (
@@ -99,14 +142,16 @@ export const Header = () => {
                 transition={{ delay: 0.42, duration: 0.35 }}
                 className="flex items-center gap-2"
               >
-                <Button variant="outline" size="lg">
-                  Login
-                </Button>
-
-                <Button size="lg">Register</Button>
+                <AuthButtons
+                  isLoading={isLoading}
+                  user={user}
+                  logout={logout}
+                />{" "}
+                {/* 👈 */}
               </motion.div>
             </nav>
 
+            {/* Mobile */}
             <div className="lg:hidden flex items-center gap-3">
               <ToggleThemeButton />
               <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -180,14 +225,13 @@ export const Header = () => {
                     className="flex flex-col gap-3 px-6 mt-6"
                   >
                     <SheetClose asChild>
-                      <Button variant="outline" size="lg" className="w-full">
-                        Login
-                      </Button>
-                    </SheetClose>
-                    <SheetClose asChild>
-                      <Button size="lg" className="w-full">
-                        Register
-                      </Button>
+                      <AuthButtons
+                        fullWidth
+                        isLoading={isLoading}
+                        user={user}
+                        logout={logout}
+                      />{" "}
+                      {/* 👈 */}
                     </SheetClose>
                   </motion.div>
                 </SheetContent>
