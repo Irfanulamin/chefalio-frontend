@@ -11,28 +11,33 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/axios";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
-  { label: "Features", href: "#features" },
-  { label: "About", href: "#about" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Features", href: "/#features" },
+  { label: "About", href: "/#about" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 // shared so both desktop and mobile render the same thing
+
 const AuthButtons = ({
   fullWidth = false,
   isLoading,
   user,
   logout,
+  onNavigate,
+  router,
 }: {
   fullWidth?: boolean;
   isLoading: boolean;
   user: unknown;
   logout: () => void;
+  onNavigate?: () => void;
+  router: ReturnType<typeof useRouter>;
 }) => {
   if (isLoading) return null;
 
@@ -42,7 +47,10 @@ const AuthButtons = ({
         variant="outline"
         size="lg"
         className={fullWidth ? "w-full" : ""}
-        onClick={() => logout()}
+        onClick={() => {
+          logout();
+          onNavigate?.();
+        }}
       >
         Logout
       </Button>
@@ -51,10 +59,25 @@ const AuthButtons = ({
 
   return (
     <>
-      <Button variant="outline" size="lg" className={fullWidth ? "w-full" : ""}>
+      <Button
+        variant="outline"
+        size="lg"
+        className={fullWidth ? "w-full" : ""}
+        onClick={() => {
+          router.push("/login");
+          onNavigate?.();
+        }}
+      >
         Login
       </Button>
-      <Button size="lg" className={fullWidth ? "w-full" : ""}>
+      <Button
+        size="lg"
+        className={fullWidth ? "w-full" : ""}
+        onClick={() => {
+          router.push("/register");
+          onNavigate?.();
+        }}
+      >
         Register
       </Button>
     </>
@@ -62,9 +85,10 @@ const AuthButtons = ({
 };
 
 export const Header = () => {
+  const router = useRouter();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
-  const { user, isLoading, logout } = useAuth(); // 👈
+  const { user, isLoading, logout } = useAuth();
 
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm">
@@ -146,6 +170,7 @@ export const Header = () => {
                   isLoading={isLoading}
                   user={user}
                   logout={logout}
+                  router={router}
                 />{" "}
                 {/* 👈 */}
               </motion.div>
@@ -224,15 +249,17 @@ export const Header = () => {
                     transition={{ delay: 0.28, duration: 0.3 }}
                     className="flex flex-col gap-3 px-6 mt-6"
                   >
-                    <SheetClose asChild>
-                      <AuthButtons
-                        fullWidth
-                        isLoading={isLoading}
-                        user={user}
-                        logout={logout}
-                      />{" "}
-                      {/* 👈 */}
-                    </SheetClose>
+                    <AuthButtons
+                      fullWidth
+                      isLoading={isLoading}
+                      user={user}
+                      logout={() => {
+                        logout();
+                        setSheetOpen(false);
+                      }}
+                      onNavigate={() => setSheetOpen(false)}
+                      router={router}
+                    />
                   </motion.div>
                 </SheetContent>
               </Sheet>
