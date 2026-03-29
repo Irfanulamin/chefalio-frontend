@@ -82,7 +82,7 @@ const features = [
   },
 ];
 
-const EASE = [0.16, 1, 0.3, 1] as const; // expo-out — buttery
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 22 },
@@ -96,7 +96,10 @@ const cardAnim = {
 
 export const Features = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, {
+    once: true,
+    margin: "-100px 0px -100px 0px",
+  }); // better scroll trigger
 
   return (
     <motion.div
@@ -104,15 +107,13 @@ export const Features = () => {
       ref={ref}
       className="container mx-auto px-4 py-10 md:py-20"
       initial="hidden"
-      animate={inView ? "visible" : "hidden"}
+      animate={inView ? "visible" : "hidden"} // only animate when in view
     >
       <motion.div
         variants={{
           hidden: {},
           visible: { transition: { staggerChildren: 0.07 } },
         }}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
         className="space-y-2 text-center max-w-140 mx-auto"
       >
         <motion.h2
@@ -127,9 +128,10 @@ export const Features = () => {
           className="mx-auto mt-6 max-w-xl text-center text-lg text-black/70 dark:text-white/70 leading-relaxed"
         >
           Enjoy a more efficient and delightful cooking experience with
-          Chefalio’s innovative features—discover personalized recipes..
+          Chefalio’s innovative features—discover personalized recipes.
         </motion.p>
       </motion.div>
+
       <motion.div
         variants={{
           hidden: {},
@@ -137,8 +139,6 @@ export const Features = () => {
             transition: { staggerChildren: 0.055, delayChildren: 0.25 },
           },
         }}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 border border-border mt-10"
       >
         {features.map((feature, i) => (

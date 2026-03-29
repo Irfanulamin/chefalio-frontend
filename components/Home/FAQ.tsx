@@ -7,29 +7,29 @@ import Image from "next/image";
 
 const QnA = [
   {
-    question: "How quickly can I get started?",
+    question: "How quickly can I start cooking with ChefAlio?",
     answer:
-      "You can be up and running in under 5 minutes. Simply sign up, connect your data sources, and our onboarding wizard walks you through every step. No credit card required for the free tier.",
+      "You can start exploring recipes in under 5 minutes! Just sign up, set your taste preferences, and our onboarding wizard guides you to recipes and meal plans tailored to you. No credit card needed for the free tier.",
   },
   {
-    question: "Is my data secure and private?",
+    question: "Are my personal recipes and preferences private?",
     answer:
-      "Absolutely. We use AES-256 encryption at rest and TLS 1.3 in transit. Your data is stored in isolated, SOC 2 Type II certified infrastructure. We never share or sell your data — ever.",
+      "Absolutely. We use AES-256 encryption at rest and TLS 1.3 in transit. Your saved recipes, ingredients, and taste preferences are stored securely and never shared with third parties.",
   },
   {
-    question: "Can I integrate with my existing tools?",
+    question: "Can I integrate ChefAlio with my existing kitchen apps?",
     answer:
-      "Yes. We support 100+ native integrations including Slack, Notion, GitHub, Linear, Salesforce, and more. Our open REST API and webhooks let you connect virtually any tool in your stack.",
+      "Yes! ChefAlio works with popular tools like Notion for recipe notes, Google Calendar for meal planning, and even grocery apps. Our open API and webhooks let you connect your favorite cooking tools.",
   },
   {
-    question: "Do you offer enterprise or custom plans?",
+    question: "Do you offer premium or custom meal plans?",
     answer:
-      "Yes. Enterprise plans include SSO, audit logs, dedicated support, custom SLAs, and volume pricing. Reach out to our sales team and we'll tailor a plan around your team's exact needs.",
+      "Yes. Our premium plans include exclusive recipes, personalized meal plans, shopping lists, and priority chef support. Contact our team and we’ll tailor a plan around your cooking style and goals.",
   },
   {
     question: "How does the 14-day free trial work?",
     answer:
-      "Get full access to every Pro feature for 14 days, no credit card required. At the end of the trial you choose a plan — or stay on the free tier with no pressure and no surprise charges.",
+      "Get full access to all ChefAlio premium features for 14 days, no credit card required. At the end, choose a plan that fits your cooking style — or continue using our free tier with no pressure and no surprise charges.",
   },
 ];
 
@@ -60,7 +60,7 @@ export const FAQ = () => {
 
           <p className="text-base text-black/90 dark:text-white/90 font-light leading-relaxed max-w-md mx-auto">
             Everything you need to know before you commit. Still have questions?
-            Contact our support team — we're here to help!
+            Contact our support team — we&apos;re here to help!
           </p>
         </motion.div>
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-24">

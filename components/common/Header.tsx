@@ -102,6 +102,7 @@ export const Header = () => {
                 <Button variant="outline" size="lg">
                   Login
                 </Button>
+
                 <Button size="lg">Register</Button>
               </motion.div>
             </nav>

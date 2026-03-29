@@ -132,9 +132,9 @@ export const AboutUs = () => {
 
               <div>
                 <p className="text-2xl font-semibold leading-snug text-black/90 dark:text-white/90">
-                  "We believe the best meals begin with{" "}
+                  &quot;We believe the best meals begin with{" "}
                   <span className="text-primary">curiosity</span> and end with{" "}
-                  <span className="text-primary">connection</span>."
+                  <span className="text-primary">connection</span>.&quot;
                 </p>
 
                 <div className="mt-6 flex items-center gap-3">
@@ -176,11 +176,11 @@ export const AboutUs = () => {
             </h2>
 
             <p className="mt-5 text-base text-black/50 dark:text-white/50 leading-relaxed">
-              At Chefalio, we're passionate about bridging the gap between
+              At Chefalio, we&apos;re passionate about bridging the gap between
               professional kitchens and home cooks. Our platform pairs
               intelligent discovery with a vibrant global community — so whether
-              you're perfecting a ramen broth or planning a weeknight dinner,
-              inspiration is always one tap away.
+              you&apos;re perfecting a ramen broth or planning a weeknight
+              dinner, inspiration is always one tap away.
             </p>
 
             <p className="mt-4 text-base text-black/50 dark:text-white/50 leading-relaxed">

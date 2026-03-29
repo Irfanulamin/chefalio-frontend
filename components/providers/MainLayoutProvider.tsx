@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "sonner";
 
 export const MainLayoutProvider = ({
   children,
@@ -10,6 +11,7 @@ export const MainLayoutProvider = ({
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       {children}
+      <Toaster richColors />
     </ThemeProvider>
   );
 };

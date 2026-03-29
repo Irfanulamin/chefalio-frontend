@@ -132,7 +132,7 @@ export const Banner = () => {
               className="text-xl text-muted-foreground dark:text-white/80 tracking-tight mt-6"
             >
               Join our community of food lovers and explore a world of delicious
-              recipes. Whether you're a seasoned chef or just starting out,
+              recipes. Whether you&apos;re a seasoned chef or just starting out,
               Chefalio has something for everyone! Discover new flavors, share
               your own creations, and connect with fellow food enthusiasts. From
               quick weeknight meals to gourmet feasts, your next favorite recipe
@@ -217,8 +217,8 @@ export const Banner = () => {
               <Image
                 src="/assets/star.png"
                 alt="Banner Image"
-                width={800}
-                height={800}
+                width={500}
+                height={500}
                 className="blur-[1.5px] hover:blur-[3px] transition-all ease-in delay-300"
               />
             </motion.div>
