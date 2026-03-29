@@ -12,6 +12,13 @@ interface LoginPayload {
   password: string;
 }
 
+interface RegisterPayload {
+  fullName: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
 export function useAuth() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -33,6 +40,16 @@ export function useAuth() {
     onError: () => {},
   });
 
+  const registerMutation = useMutation({
+    mutationFn: (payload: RegisterPayload) =>
+      axiosInstance.post<Me>("/auth/register", payload).then((r) => r.data),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["me"], data);
+    },
+    // 👇 do NOT redirect on error, just let it throw back to the caller
+    onError: () => {},
+  });
+
   const logoutMutation = useMutation({
     mutationFn: () => axiosInstance.post("/auth/logout"),
     onSuccess: () => {
@@ -45,6 +62,7 @@ export function useAuth() {
     user,
     isLoading,
     isAuthenticated: !!user,
+    register: registerMutation.mutateAsync, // mutateAsync re-throws so the form can catch it
     login: loginMutation.mutateAsync, // mutateAsync re-throws so the form can catch it
     logout: logoutMutation.mutate,
     isLoginLoading: loginMutation.isPending,

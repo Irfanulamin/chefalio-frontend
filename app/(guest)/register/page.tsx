@@ -9,31 +9,46 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { useAuth } from "@/hooks/useAuth";
 
-export default function LoginPage() {
-  const { login, isLoading } = useAuth();
+export default function RegisterPage() {
+  const { register, isLoading } = useAuth();
 
-  const loginSchema = z.object({
-    usernameOrEmail: z.string(),
-    password: z.string(),
+  const registerSchema = z.object({
+    fullName: z
+      .string()
+      .min(1, "Full name is required")
+      .max(50, "Full name must be at most 50 characters"),
+
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username must be at most 30 characters"),
+
+    email: z.string().min(1, "Email is required").email("Invalid email format"),
+
+    password: z.string().min(6, "Password must be at least 6 characters"),
   });
 
   const form = useForm({
     defaultValues: {
-      usernameOrEmail: "",
+      fullName: "",
+      username: "",
+      email: "",
       password: "",
     },
     validators: {
-      onSubmit: loginSchema,
+      onSubmit: registerSchema,
     },
     onSubmit: async ({ value }) => {
       try {
-        await login(value);
-        toast.success("Signed in successfully!", { position: "bottom-right" });
+        await register(value);
+        toast.success("Account created successfully!", {
+          position: "bottom-right",
+        });
       } catch (err: Error | unknown) {
         const errorMessage =
           err instanceof Error
             ? err.message
-            : "Login failed. Please try again.";
+            : "Failed to create account. Please try again.";
         toast.error(errorMessage, {
           position: "bottom-right",
         });
@@ -43,10 +58,22 @@ export default function LoginPage() {
 
   const fieldDefinitions = [
     {
-      name: "usernameOrEmail",
-      label: "Email or Username",
-      placeholder: "Enter your username or email",
+      name: "fullName",
+      label: "Full Name",
+      placeholder: "Enter your full name",
       type: "text",
+    },
+    {
+      name: "username",
+      label: "Username",
+      placeholder: "Enter your username",
+      type: "text",
+    },
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Enter your email",
+      type: "email",
     },
     {
       name: "password",
@@ -90,8 +117,8 @@ export default function LoginPage() {
           <div className="relative flex max-w-4xl bg-white dark:bg-zinc-950 rounded-[14px] overflow-hidden">
             <div className="hidden md:flex w-1/2">
               <Image
-                src="/login.png"
-                alt="Chefalio Login"
+                src="/register.png"
+                alt="Chefalio Register"
                 width={400}
                 height={400}
                 className="w-full h-full object-cover"
@@ -101,9 +128,9 @@ export default function LoginPage() {
             <div className="flex w-full md:w-1/2 items-center justify-center p-8">
               <div className="w-full max-w-md space-y-6">
                 <div>
-                  <h1 className="text-2xl font-semibold">Sign In</h1>
+                  <h1 className="text-2xl font-semibold">Create Account</h1>
                   <p className="text-sm text-gray-500">
-                    Welcome back! Please enter your details to sign in.
+                    Please enter your details to create an account.
                   </p>
                 </div>
 
@@ -130,14 +157,14 @@ export default function LoginPage() {
                     className="w-full rounded-lg py-5"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
 
                 <p className="text-sm text-center text-gray-500">
-                  Don&apos;t have an account?{" "}
+                  Already have an account?{" "}
                   <span className="text-primary font-medium cursor-pointer hover:text-orange-400">
-                    Sign up
+                    Sign in
                   </span>
                 </p>
               </div>
