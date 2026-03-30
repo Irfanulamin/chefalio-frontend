@@ -119,6 +119,7 @@ export default function RegisterPage() {
               <Image
                 src="/register.png"
                 alt="Chefalio Register"
+                blurDataURL="/register.png"
                 width={400}
                 height={400}
                 className="w-full h-full object-cover"
