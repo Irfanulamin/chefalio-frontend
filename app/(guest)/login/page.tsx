@@ -94,6 +94,7 @@ export default function LoginPage() {
                 alt="Chefalio Login"
                 width={400}
                 height={400}
+                blurDataURL="/login.png"
                 className="w-full h-full object-cover"
               />
             </div>
