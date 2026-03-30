@@ -39,9 +39,8 @@ const AuthButtons = ({
   onNavigate?: () => void;
   router: ReturnType<typeof useRouter>;
 }) => {
-  if (isLoading) return null;
-
-  if (user) {
+  // If user exists → show logout
+  if (user && !isLoading) {
     return (
       <Button
         variant="outline"
@@ -57,6 +56,7 @@ const AuthButtons = ({
     );
   }
 
+  // Default (loading OR no user) → show guest actions
   return (
     <>
       <Button

@@ -25,14 +25,17 @@ export function useAuth() {
 
   const { data: user, isLoading } = useQuery({
     queryKey: ["me"],
-    queryFn: () => axiosInstance.get<Me>("/auth/me").then((r) => r.data),
+    queryFn: () =>
+      axiosInstance.get<Me>("/auth/me").then((response) => response.data),
     retry: false,
     staleTime: Infinity,
   });
 
   const loginMutation = useMutation({
     mutationFn: (payload: LoginPayload) =>
-      axiosInstance.post<Me>("/auth/login", payload).then((r) => r.data),
+      axiosInstance
+        .post<Me>("/auth/login", payload)
+        .then((response) => response.data),
     onSuccess: (data) => {
       queryClient.setQueryData(["me"], data);
     },
@@ -42,7 +45,9 @@ export function useAuth() {
 
   const registerMutation = useMutation({
     mutationFn: (payload: RegisterPayload) =>
-      axiosInstance.post<Me>("/auth/register", payload).then((r) => r.data),
+      axiosInstance
+        .post<Me>("/auth/register", payload)
+        .then((response) => response.data),
     onSuccess: (data) => {
       queryClient.setQueryData(["me"], data);
     },
