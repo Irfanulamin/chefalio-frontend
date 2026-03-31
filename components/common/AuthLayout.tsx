@@ -47,9 +47,9 @@ export default function AuthLayout({
             animation: "spin 3s linear infinite",
           }}
         >
-          <div className="relative flex w-225 max-w-4xl bg-white dark:bg-zinc-950 rounded-[14px] overflow-hidden">
+          <div className="relative flex w-full lg:w-225 max-w-4xl bg-white dark:bg-zinc-950 rounded-[14px] overflow-hidden">
             {/* Image panel */}
-            <div className="hidden md:flex w-1/2 min-w-70 bg-gray-100 dark:bg-zinc-800 items-center justify-center min-h-100 relative overflow-hidden">
+            <div className="hidden md:flex md:w-1/2 min-w-70 bg-gray-100 dark:bg-zinc-800 items-center justify-center min-h-100 relative overflow-hidden">
               {!loaded && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-16 h-16 rounded-full bg-gray-200 dark:bg-zinc-700 animate-pulse" />
@@ -66,7 +66,7 @@ export default function AuthLayout({
             </div>
 
             {/* Form panel */}
-            <div className="flex w-full md:w-1/2 items-center justify-center px-8 py-12 relative">
+            <div className="flex w-full md:w-1/2 items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12 relative">
               <div
                 className="absolute inset-x-0 top-0 h-24 rounded-t-[14px] pointer-events-none"
                 style={{

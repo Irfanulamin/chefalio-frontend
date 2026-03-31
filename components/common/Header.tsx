@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -101,9 +102,12 @@ export const Header = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="relative flex flex-col sm:flex-row justify-center sm:justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
           >
-            <p className="text-center sm:text-left">
-              Get your recipe ideas from the top chefs!
-            </p>
+            <Link
+              href="/login"
+              className="text-center sm:text-left hover:underline "
+            >
+              Try it free, no credit card required!{" "}
+            </Link>
             <motion.span
               animate={{ x: [0, 4, 0] }}
               transition={{
@@ -140,7 +144,7 @@ export const Header = () => {
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="text-primary text-2xl font-extrabold tracking-tight cursor-pointer select-none"
             >
-              Chefalio
+              <Link href="/">Chefalio</Link>
             </motion.h2>
 
             {/* Desktop */}
