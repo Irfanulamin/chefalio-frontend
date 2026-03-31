@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
           }}
         >
           {/* Card */}
-          <div className="relative bg-white dark:bg-zinc-950 rounded-[14px] px-8 py-8 w-104 max-w-full">
+          <div className="relative bg-white dark:bg-zinc-950 rounded-[14px] px-8 py-8 w-full lg:w-104 max-w-full">
             {/* Inner ambient glow at top */}
             <div
               className="absolute inset-x-0 top-0 h-24 rounded-t-[14px] pointer-events-none"
