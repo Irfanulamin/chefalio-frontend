@@ -12,7 +12,7 @@ export const MainLayoutProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       <Toaster richColors />
     </ThemeProvider>
