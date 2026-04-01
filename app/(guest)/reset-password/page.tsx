@@ -8,30 +8,44 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
-import { FingerprintIcon } from "@phosphor-icons/react/dist/ssr";
-import { useState } from "react";
+import { LockKeyIcon } from "@phosphor-icons/react/dist/ssr";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function ForgotPasswordPage() {
-  const { forgotPassword, isLoading } = useAuth();
-  const [onSuccess, setOnSuccess] = useState(false);
+function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const resetToken = searchParams.get("token") ?? "";
+  const { resetPassword, isLoading } = useAuth();
 
-  const forgotPasswordSchema = z.object({
-    email: z.email("Invalid email format"),
-  });
+  const resetPasswordSchema = z
+    .object({
+      newPassword: z.string().min(6, "Password must be at least 6 characters"),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
 
   const form = useForm({
-    defaultValues: { email: "" },
-    validators: { onSubmit: forgotPasswordSchema },
+    defaultValues: { newPassword: "", confirmPassword: "" },
+    validators: { onSubmit: resetPasswordSchema },
     onSubmit: async ({ value }) => {
-      try {
-        await forgotPassword(value);
-        toast.success(
-          "If an account exists, a password reset link has been sent to your email.",
+      if (!resetToken) {
+        toast.error(
+          "Reset token is missing. Please use the link from your email.",
           {
             position: "bottom-right",
           },
         );
-        setOnSuccess(true);
+        return;
+      }
+
+      try {
+        await resetPassword({ resetToken, newPassword: value.newPassword });
+        toast.success("Your password has been reset successfully.", {
+          position: "bottom-right",
+        });
       } catch (err: Error | unknown) {
         const errorMessage =
           err instanceof Error
@@ -58,7 +72,7 @@ export default function ForgotPasswordPage() {
       <div className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-white dark:from-zinc-950 to-transparent pointer-events-none z-10" />
 
       <div className="relative z-20">
-        {/* Spinning glow halo — softened, stays behind */}
+        {/* Spinning glow halo */}
         <div
           className="absolute -inset-2 rounded-[22px] blur-2xl opacity-50"
           style={{
@@ -87,79 +101,75 @@ export default function ForgotPasswordPage() {
                   "radial-gradient(ellipse 70% 60% at 50% 0%, rgba(167,209,41,0.12) 0%, transparent 100%)",
               }}
             />
-            <div className="relative z-10">
-              {onSuccess ? (
-              <div className="flex items-center gap-2 rounded-lg text-base text-[#7A9A20] dark:text-[#A7D129]">
-                Please check your email for the password reset link. If you
-                don&apos;t see it, check your spam folder.
-              </div>
-              ) : (
-              <>
-                {/* Icon */}
-                <div className="mb-5">
-                <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-[#A7D129]/10 dark:bg-[#A7D129]/15">
-                  <FingerprintIcon
+
+            {/* Icon */}
+            <div className="mb-5">
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-[#A7D129]/10 dark:bg-[#A7D129]/15">
+                <LockKeyIcon
                   size={26}
                   weight="fill"
                   className="text-[#7A9A20] dark:text-[#A7D129]"
-                  />
-                </div>
-                </div>
+                />
+              </div>
+            </div>
 
-                {/* Heading */}
-                <div className="mb-6">
-                <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-                  Forgot your password?
-                </h1>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5 leading-relaxed">
-                  Enter your email and we&apos;ll send you a link to reset
-                  your password.
-                </p>
-                </div>
+            {/* Heading */}
+            <div className="mb-6">
+              <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+                Set a new password
+              </h1>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5 leading-relaxed">
+                Choose a strong password. It must be at least 6 characters long.
+              </p>
+            </div>
 
-                {/* Divider */}
-                <div className="h-px bg-zinc-100 dark:bg-zinc-800 mb-6" />
+            {/* Divider */}
+            <div className="h-px bg-zinc-100 dark:bg-zinc-800 mb-6" />
 
-                {/* Form */}
-                <form
-                className="space-y-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  form.handleSubmit();
-                }}
-                >
-                <FieldGroup>
-                  <FormField
+            {/* Form */}
+            <form
+              className="space-y-5"
+              onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
+              }}
+            >
+              <FieldGroup>
+                <FormField
                   form={form}
-                  name="email"
-                  label="Email address"
-                  placeholder="you@example.com"
-                  type="email"
-                  />
-                </FieldGroup>
+                  name="newPassword"
+                  label="New password"
+                  placeholder="At least 6 characters"
+                  type="password"
+                />
+                <FormField
+                  form={form}
+                  name="confirmPassword"
+                  label="Confirm new password"
+                  placeholder="Repeat your password"
+                  type="password"
+                />
+              </FieldGroup>
 
-                <Button
-                  type="submit"
-                  className="w-full rounded-lg py-5 font-bold text-sm tracking-wide"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Sending…" : "Send Reset Link"}
-                </Button>
+              <Button
+                type="submit"
+                className="w-full rounded-lg py-5 font-bold text-sm tracking-wide"
+                disabled={isLoading || !resetToken}
+              >
+                {isLoading ? "Resetting…" : "Reset Password"}
+              </Button>
 
-                <p className="text-center text-sm text-zinc-400 dark:text-zinc-500">
-                  Remembered it?{" "}
-                  <Link
+              <p className="text-center text-sm text-zinc-400 dark:text-zinc-500">
+                Back to{" "}
+                <Link
                   href="/login"
                   className="font-medium text-zinc-800 dark:text-zinc-200 hover:underline underline-offset-2"
-                  >
-                  Back to sign in
-                  </Link>
-                </p>
-                </form>
-              </>
-              )}
-            </div>
+                >
+                  Sign in
+                </Link>
+              </p>
+            </form>
           </div>
         </div>
       </div>
@@ -180,5 +190,13 @@ export default function ForgotPasswordPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

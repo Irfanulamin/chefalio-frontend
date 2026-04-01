@@ -19,6 +19,15 @@ interface RegisterPayload {
   password: string;
 }
 
+interface forgotPasswordPayload {
+  email: string;
+}
+
+interface ResetPasswordPayload {
+  resetToken: string;
+  newPassword: string;
+}
+
 export function useAuth() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -63,6 +72,22 @@ export function useAuth() {
     },
   });
 
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (data: forgotPasswordPayload) =>
+      axiosInstance.post("/auth/forgot-password", data),
+    // No need to handle onSuccess or onError here, the form can handle it directly
+  });
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: (data: ResetPasswordPayload) =>
+      axiosInstance.post("/auth/reset-password", data),
+    onSuccess: () => {
+      // Pass a flag via query param so the login page can show a toast
+      router.push("/login?reset=success");
+    },
+    onError: () => {},
+  });
+
   return {
     user,
     isLoading,
@@ -71,5 +96,7 @@ export function useAuth() {
     login: loginMutation.mutateAsync, // mutateAsync re-throws so the form can catch it
     logout: logoutMutation.mutate,
     isLoginLoading: loginMutation.isPending,
+    forgotPassword: forgotPasswordMutation.mutateAsync,
+    resetPassword: resetPasswordMutation.mutateAsync,
   };
 }

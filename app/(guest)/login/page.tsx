@@ -9,9 +9,12 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+function LoginForm() {
   const { login, isLoading } = useAuth();
+  const searchParams = useSearchParams();
 
   const loginSchema = z.object({
     usernameOrEmail: z
@@ -52,13 +55,22 @@ export default function LoginPage() {
     },
   ];
 
+  const justReset = searchParams.get("reset") === "success";
+
   return (
     <AuthLayout imageSrc="/login.png" imageAlt="Chefalio Login">
       <div>
-        <h1 className="text-2xl font-semibold">Sign In</h1>
-        <p className="text-sm text-gray-500">
-          Welcome back! Please enter your details to sign in.
-        </p>
+        <h1 className="text-2xl font-semibold mb-2">Sign In</h1>
+
+        {justReset ? (
+          <div className="flex items-center gap-2 rounded-lg bg-primary/10 border border-primary/30 px-4 py-3 text-sm text-[#7A9A20] dark:text-primary">
+            Password reset successfully. Sign in with your new password.
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">
+            Welcome back! Please enter your details to sign in.
+          </p>
+        )}
       </div>
       <div className="h-px bg-zinc-100 dark:bg-zinc-800 mb-6" />
       <form
@@ -101,5 +113,13 @@ export default function LoginPage() {
         </Link>
       </p>
     </AuthLayout>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
