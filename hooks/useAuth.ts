@@ -28,6 +28,13 @@ interface ResetPasswordPayload {
   newPassword: string;
 }
 
+interface Profile {
+  fullName: string;
+  username: string;
+  email: string;
+  profile_url: string;
+}
+
 export function useAuth() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -47,6 +54,9 @@ export function useAuth() {
         .then((response) => response.data),
     onSuccess: (data) => {
       queryClient.setQueryData(["me"], data);
+      if (data.role === "user") {
+        router.push("/recipes");
+      }
     },
     // 👇 do NOT redirect on error, just let it throw back to the caller
     onError: () => {},
@@ -88,6 +98,16 @@ export function useAuth() {
     onError: () => {},
   });
 
+  const { data: profileData, isLoading: isProfileLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: () =>
+      axiosInstance
+        .get<Profile>("/auth/profile")
+        .then((response) => response.data),
+    retry: false,
+    staleTime: Infinity,
+  });
+
   return {
     user,
     isLoading,
@@ -98,5 +118,7 @@ export function useAuth() {
     isLoginLoading: loginMutation.isPending,
     forgotPassword: forgotPasswordMutation.mutateAsync,
     resetPassword: resetPasswordMutation.mutateAsync,
+    profile: profileData,
+    isProfileLoading,
   };
 }
