@@ -1,6 +1,6 @@
 "use client";
 
-import { useRecipe } from "@/hooks/useRecipe";
+import { useRecipes } from "@/hooks/useRecipe";
 import { Recipe } from "@/types/recipes.type";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -51,10 +51,10 @@ export default function RecipesPage() {
   // Tags are sent as a comma-separated string: "vegan,quick"
   const tagsParam = selectedTags.join(",");
 
-  const { recipes, isLoading, isFetching } = useRecipe({
+  const { recipes, isLoading, isFetching } = useRecipes({
     search: debouncedSearch,
     page,
-    limit: 1,
+    limit: 12,
     tags: tagsParam || undefined,
     difficulty: difficulty || undefined,
     author: debouncedAuthor || undefined,

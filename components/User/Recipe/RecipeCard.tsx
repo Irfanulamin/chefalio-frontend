@@ -1,15 +1,25 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  useRecipeStats,
+  useToggleLove,
+  useToggleSave,
+} from "@/hooks/useRecipe";
 import { cn } from "@/lib/utils";
 import { Recipe } from "@/types/recipes.type";
 import {
-  BookmarkIcon,
+  BookmarkSimpleIcon,
   HeartIcon,
   ShareFatIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
+import Link from "next/link";
 
 export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const { stats } = useRecipeStats(recipe._id);
+  const { mutate: toggleSave } = useToggleSave();
+  const { mutate: toggleLove } = useToggleLove();
+  console.log(stats);
   const difficultyColors = {
     beginner:
       "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
@@ -17,8 +27,17 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
       "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
     advance: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100",
   };
+
+  const handleLoveToggle = () => {
+    toggleLove(recipe._id);
+  };
+
+  const handleSaveToggle = () => {
+    toggleSave(recipe._id);
+  };
+
   return (
-    <div className="group w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg dark:hover:shadow-slate-900 flex flex-col">
+    <div className="group w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#fafafa] dark:bg-slate-950 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg dark:hover:shadow-slate-900 flex flex-col">
       {/* Image */}
       <div className="relative h-50 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
         <Image
@@ -41,12 +60,15 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         </div>
 
         {/* Love button */}
-        <button className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95">
+        <button
+          onClick={() => handleLoveToggle()}
+          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95"
+        >
           <HeartIcon
-            weight="bold"
+            weight={stats?.isLoved ? "fill" : "bold"}
             className={cn(
               "h-4 w-4 transition-all duration-200",
-              false
+              stats?.isLoved
                 ? "fill-rose-500 text-rose-500 scale-110"
                 : "text-slate-500 dark:text-slate-400",
             )}
@@ -125,10 +147,10 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
           <span className="flex items-center gap-1.5">
             <HeartIcon
-              weight="bold"
+              weight={stats?.isLoved ? "fill" : "bold"}
               className={cn(
                 "h-3.5 w-3.5",
-                false && "fill-rose-400 text-rose-400",
+                stats?.isLoved && "fill-rose-400 text-rose-400",
               )}
             />
             <span className="font-medium text-slate-700 dark:text-slate-300">
@@ -137,7 +159,13 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             loves
           </span>
           <span className="flex items-center gap-1.5">
-            <BookmarkIcon className="h-3.5 w-3.5" weight="bold" />
+            <BookmarkSimpleIcon
+              className={cn(
+                "h-3.5 w-3.5",
+                stats?.isSaved && "fill-green-800 text-green-800",
+              )}
+              weight={stats?.isSaved ? "fill" : "bold"}
+            />
             <span className="font-medium text-slate-700 dark:text-slate-300">
               {recipe.savedCount.toLocaleString()}
             </span>{" "}
@@ -147,10 +175,24 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
         {/* Actions */}
         <div className="flex gap-2 mt-auto">
-          <Button variant="outline" className="flex-1 capitalize h-10">
-            Save
+          <Button
+            onClick={() => {
+              handleSaveToggle();
+            }}
+            variant="outline"
+            className="flex-1 capitalize h-10"
+          >
+            <BookmarkSimpleIcon
+              className="h-4 w-4"
+              weight={stats?.isSaved ? "fill" : "bold"}
+            />
+            {stats?.isSaved ? "Saved" : "Save"}
           </Button>
-          <Button className="flex-1 capitalize h-10">View Recipe</Button>
+          <Link href={`/recipes/${recipe._id}`} className="flex-1">
+            <Button className="flex-1 capitalize h-10 w-full">
+              View Recipe
+            </Button>
+          </Link>
           <Button
             size="icon"
             variant="outline"

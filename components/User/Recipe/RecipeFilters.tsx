@@ -226,10 +226,11 @@ export const RecipeFilters = ({
       </div>
 
       {/* ── SEARCH ── */}
-      <InputGroup className="max-w-lg h-12">
+      <InputGroup className="max-w-lg h-12 border-2 rounded-full overflow-hidden">
         <InputGroupInput
           placeholder="Search your recipes..."
           value={search}
+          className=" "
           onChange={(e) => handleSearchChange(e.target.value)}
         />
         <InputGroupAddon>
