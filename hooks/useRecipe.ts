@@ -1,26 +1,30 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+// hooks/useRecipe.ts
+import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "./axios/interceptors";
 import { RecipeApiResponse } from "@/types/recipes.type";
 
-export function useRecipe() {
-  const queryClient = useQueryClient();
-
-  const { data: recipes, isLoading } = useQuery({
-    queryKey: ["recipes"],
+export function useRecipe(params?: {
+  search?: string;
+  page?: number;
+  limit?: number;
+  tags?: string;
+  difficulty?: string;
+  author?: string;
+}) {
+  const {
+    data: recipes,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["recipes", params],
     queryFn: () =>
       axiosInstance
-        .get<RecipeApiResponse>("/recipes/all")
-        .then((response) => response.data),
-    select: (data) => {
-      queryClient.setQueryData(["recipes"], data);
-      return data;
-    },
-    retry: false,
-    staleTime: Infinity,
+        .get<RecipeApiResponse>("/recipes/all", { params })
+        .then((res) => res.data),
+
+    staleTime: 1000 * 60,
+    placeholderData: (prev) => prev,
   });
 
-  return {
-    recipes,
-    isLoading,
-  };
+  return { recipes, isLoading, isFetching };
 }
