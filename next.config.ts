@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Your existing image configuration
   images: {
     remotePatterns: [
       {
@@ -9,15 +8,16 @@ const nextConfig = {
       },
     ],
   },
-
-  // The new rewrite rule for your API
   async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "https://chefalio-backend.vercel.app/:path*",
-      },
-    ];
+    return {
+      // beforeFiles forces Next.js to forward the request immediately
+      beforeFiles: [
+        {
+          source: "/api/:path*",
+          destination: "https://chefalio-backend.vercel.app/:path*",
+        },
+      ],
+    };
   },
 };
 
