@@ -22,7 +22,6 @@ export interface Recipe {
   savedCount: number;
   createdAt: string;
   updatedAt: string;
-  __v: number;
 }
 
 export interface Author {

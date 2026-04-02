@@ -19,7 +19,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const { stats } = useRecipeStats(recipe._id);
   const { mutate: toggleSave } = useToggleSave();
   const { mutate: toggleLove } = useToggleLove();
-  console.log(stats);
+
   const difficultyColors = {
     beginner:
       "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
@@ -36,8 +36,22 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
     toggleSave(recipe._id);
   };
 
+  const handleShareLinkToClipboard = () => {
+    const url = `${window.location.origin}/recipes/${recipe._id}`;
+    navigator.clipboard.writeText(url);
+    if (navigator.share) {
+      void navigator
+        .share({
+          title: recipe.title,
+          text: recipe.description,
+          url,
+        })
+        .catch(() => undefined);
+    }
+  };
+
   return (
-    <div className="group w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#fafafa] dark:bg-slate-950 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg dark:hover:shadow-slate-900 flex flex-col">
+    <div className="group w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#f8f8f8] dark:bg-slate-950/25 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg dark:hover:shadow-slate-900 flex flex-col">
       {/* Image */}
       <div className="relative h-50 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
         <Image
@@ -195,10 +209,11 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </Link>
           <Button
             size="icon"
-            variant="outline"
-            className="h-10 w-10 shrink-0 border-slate-200 dark:border-slate-700 "
+            variant="default"
+            onClick={() => handleShareLinkToClipboard()}
+            className="h-10 w-10 shrink-0 border-slate-200 dark:border-slate-700 cursor-pointer"
           >
-            <ShareFatIcon className="h-4 w-4 text-slate-500" />
+            <ShareFatIcon className="h-4 w-4 text-black" weight="fill" />
           </Button>
         </div>
       </div>
