@@ -44,3 +44,21 @@ export interface Pagination {
   limit: number;
   totalPages: number;
 }
+
+export interface SavedRecipeApiResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: SavedRecipe[];
+}
+
+export interface SavedRecipe {
+  _id: string;
+  userId: string;
+  recipeId: Recipe;
+  isLoved: boolean;
+  lovedAt: string | null;
+  isSaved: boolean;
+  savedAt: string | null;
+  updatedAt: string;
+}

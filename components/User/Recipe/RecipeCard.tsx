@@ -51,7 +51,20 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   };
 
   return (
-    <div className="group w-full max-w-sm overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-[#f8f8f8] dark:bg-slate-950/25 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-lg dark:hover:shadow-slate-900 flex flex-col">
+    <div
+      className="group w-full max-w-sm overflow-hidden rounded-2xl 
+border border-blue-200/40 dark:border-blue-400/20 
+bg-linear-to-br from-white/60 via-blue-50/40 to-blue-100/30 
+dark:from-black/80 dark:via-blue-900/20 dark:to-black/30
+backdrop-blur-xl backdrop-saturate-150
+shadow-[0_10px_30px_rgba(59,130,246,0.15)] 
+dark:shadow-[0_10px_30px_rgba(59,130,246,0.10)]
+transition-all duration-300 
+hover:-translate-y-1 
+hover:shadow-[0_15px_40px_rgba(59,130,246,0.25)] 
+dark:hover:shadow-[0_15px_40px_rgba(59,130,246,0.20)]
+flex flex-col"
+    >
       {/* Image */}
       <div className="relative h-50 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
         <Image

@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "./axios/interceptors";
-import { Recipe, RecipeApiResponse } from "@/types/recipes.type";
+import {
+  Recipe,
+  RecipeApiResponse,
+  SavedRecipeApiResponse,
+} from "@/types/recipes.type";
 
 interface RecipeStats {
   isLoved: boolean;
@@ -229,4 +233,36 @@ export function useToggleSave() {
       queryClient.invalidateQueries({ queryKey: ["recipe-stats", id] });
     },
   });
+}
+
+/* =========================
+   5. SAVED RECIPES HOOK
+========================= */
+export function useSavedRecipes() {
+  const { data, isLoading, isFetching, error } = useQuery({
+    queryKey: ["saved-recipes"],
+    queryFn: () =>
+      axiosInstance
+        .get<SavedRecipeApiResponse>("/recipe-interaction/saved")
+        .then((res) => res.data),
+    staleTime: 1000 * 60,
+    placeholderData: (prev) => prev,
+  });
+  return { savedRecipes: data, isLoading, isFetching, error };
+}
+
+/* =========================
+   6. LOVED RECIPE HOOK
+========================= */
+export function useLovedRecipes() {
+  const { data, isLoading, isFetching, error } = useQuery({
+    queryKey: ["loved-recipes"],
+    queryFn: () =>
+      axiosInstance
+        .get<SavedRecipeApiResponse>("/recipe-interaction/loved")
+        .then((res) => res.data),
+    staleTime: 1000 * 60,
+    placeholderData: (prev) => prev,
+  });
+  return { lovedRecipes: data, isLoading, isFetching, error };
 }

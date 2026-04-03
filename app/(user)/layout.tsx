@@ -17,8 +17,7 @@ export default function UserLayout({
         links={[
           { label: "Recipes", href: "/recipes" },
           { label: "Cookbooks", href: "/cookbooks" },
-          { label: "Saved Recipes", href: "/saved-recipes" },
-          { label: "Loved Recipes", href: "/loved-recipes" },
+          { label: "Activity", href: "/activity" },
         ]}
       />
     </ProtectedRoute>

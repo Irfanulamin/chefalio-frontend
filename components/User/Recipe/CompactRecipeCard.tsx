@@ -1,0 +1,208 @@
+import {
+  useRecipeStats,
+  useToggleLove,
+  useToggleSave,
+} from "@/hooks/useRecipe";
+import { SavedRecipe } from "@/types/recipes.type";
+import {
+  BookmarkSimpleIcon,
+  CarrotIcon,
+  ChefHatIcon,
+  ClockIcon,
+  EyeIcon,
+  HeartIcon,
+  TagIcon,
+} from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import Link from "next/link";
+
+const difficultyConfig = {
+  beginner: {
+    label: "Beginner",
+    className:
+      "bg-blue-50 text-blue-700 ring-1 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900",
+  },
+  intermediate: {
+    label: "Intermediate",
+    className:
+      "bg-purple-50 text-purple-700 ring-1 ring-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:ring-purple-900",
+  },
+  advance: {
+    label: "Advanced",
+    className:
+      "bg-orange-50 text-orange-700 ring-1 ring-orange-200 dark:bg-orange-950/40 dark:text-orange-300 dark:ring-orange-900",
+  },
+} as const;
+
+function getInitials(name?: string): string {
+  if (!name) return "?";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
+export const CompactRecipeCard = ({
+  recipe,
+  button,
+}: {
+  recipe: SavedRecipe;
+  button: "save" | "love";
+}) => {
+  const { stats } = useRecipeStats(recipe.recipeId?._id);
+  const { mutate: toggleSave } = useToggleSave();
+  const { mutate: toggleLove } = useToggleLove();
+
+  const handleLoveToggle = () => {
+    toggleLove(recipe.recipeId?._id);
+  };
+
+  const handleSaveToggle = () => {
+    toggleSave(recipe.recipeId?._id);
+  };
+
+  const difficulty =
+    difficultyConfig[
+      recipe.recipeId?.difficulty as keyof typeof difficultyConfig
+    ];
+  const initials = getInitials(recipe.recipeId?.author?.fullName);
+  return (
+    <article
+      key={recipe._id}
+      className="group relative flex items-start gap-4 px-5 py-4 bg-white dark:bg-slate-950/50 border border-slate-200/50 dark:border-slate-800/50 rounded-lg hover:border-slate-300/70 dark:hover:border-slate-700/70 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200"
+    >
+      {/* Thumbnail */}
+      <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+        {recipe.recipeId?.images?.[0] ? (
+          <Image
+            src={recipe.recipeId.images[0]}
+            alt={recipe.recipeId?.title ?? "Recipe image"}
+            width={64}
+            height={64}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            crossOrigin="anonymous"
+            loading="eager"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <ChefHatIcon className="w-6 h-6 text-slate-400 dark:text-slate-600" />
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        {/* Title + Badge */}
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50 truncate">
+            {recipe.recipeId?.title ?? "Untitled Recipe"}
+          </h2>
+          {difficulty && (
+            <span
+              className={`inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-md whitespace-nowrap ${difficulty.className}`}
+            >
+              {difficulty.label}
+            </span>
+          )}
+        </div>
+
+        {/* Author */}
+        <div className="flex items-center gap-1.5 mb-2">
+          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700/80 text-[10px] font-semibold text-slate-700 dark:text-slate-200 shrink-0">
+            {initials}
+          </span>
+          <span className="text-xs text-slate-600 dark:text-slate-300 truncate">
+            {recipe.recipeId?.author?.fullName ?? "Unknown author"}
+          </span>
+        </div>
+
+        {/* Description */}
+        {recipe.recipeId?.description && (
+          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+            {recipe.recipeId.description}
+          </p>
+        )}
+
+        {/* Meta Row */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {recipe.recipeId?.ingredients?.length != null && (
+            <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+              <CarrotIcon className="w-3.5 h-3.5" weight="fill" />
+              {recipe.recipeId.ingredients.length} ingredients
+            </span>
+          )}
+          {recipe.recipeId?.tags?.length > 0 && (
+            <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+              <TagIcon className="w-3.5 h-3.5" weight="fill" />
+              {recipe.recipeId.tags
+                .slice(0, 2)
+                .map((tag) => `#${tag}`)
+                .join(" ")}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="shrink-0 flex items-center gap-2 self-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {button == "love" && (
+          <button
+            onClick={() => handleLoveToggle()}
+            aria-label={
+              stats?.isLoved ? "Unlike this recipe" : "Like this recipe"
+            }
+            className={`p-1.5 rounded-lg transition-all duration-150 disabled:opacity-50 ${
+              stats?.isLoved
+                ? "bg-red-500/10 text-red-600 dark:bg-red-500/15 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/25"
+                : "text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-800"
+            }`}
+          >
+            <HeartIcon
+              className="w-4.5 h-4.5"
+              weight={stats?.isLoved ? "fill" : "bold"}
+              strokeWidth={2}
+            />
+          </button>
+        )}
+
+        {button == "save" && (
+          <button
+            onClick={() => handleSaveToggle()}
+            aria-label={
+              stats?.isSaved ? "Unsave this recipe" : "Save this recipe"
+            }
+            className={`p-1.5 rounded-lg transition-all duration-150 disabled:opacity-50 ${
+              stats?.isSaved
+                ? "bg-blue-500/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400 hover:bg-blue-500/20 dark:hover:bg-blue-500/25"
+                : "text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-800"
+            }`}
+          >
+            <BookmarkSimpleIcon
+              className="w-4.5 h-4.5"
+              weight={stats?.isSaved ? "fill" : "bold"}
+            />
+          </button>
+        )}
+        <Link
+          href={`/recipes/${recipe.recipeId?._id}`}
+          aria-label={
+            stats?.isLoved ? "Unlike this recipe" : "Like this recipe"
+          }
+          className={`p-1.5 rounded-lg transition-all duration-150 disabled:opacity-50 ${
+            stats?.isLoved
+              ? "bg-green-500/10 text-primary dark:bg-accent hover:bg-green-500/20 "
+              : "text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-800"
+          }`}
+        >
+          <EyeIcon
+            className="w-4.5 h-4.5"
+            weight={stats?.isLoved ? "fill" : "bold"}
+            strokeWidth={2}
+          />
+        </Link>
+      </div>
+    </article>
+  );
+};
