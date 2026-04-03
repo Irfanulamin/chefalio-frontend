@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Recipe } from "@/types/recipes.type";
 import {
   BookmarkSimpleIcon,
+  EyeIcon,
   HeartIcon,
   ShareFatIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -140,7 +141,7 @@ flex flex-col"
           {recipe.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-[11px] text-slate-600 dark:text-slate-400"
+              className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-1 text-[11px] text-slate-600 dark:text-slate-400 capitalize"
             >
               {tag}
             </span>
@@ -217,7 +218,7 @@ flex flex-col"
           </Button>
           <Link href={`/recipes/${recipe._id}`} className="flex-1">
             <Button className="flex-1 capitalize h-10 w-full">
-              View Recipe
+              <EyeIcon className="h-4 w-4 text-secondary" weight="fill" /> View
             </Button>
           </Link>
           <Button

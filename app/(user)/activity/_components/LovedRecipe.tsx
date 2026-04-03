@@ -84,7 +84,7 @@ export default function LovedRecipesSection() {
 
   return (
     <>
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800 shadow-lg dark:shadow-blue-950">
         {recipes.map((recipe) => {
           return (
             <CompactRecipeCard key={recipe._id} recipe={recipe} button="love" />

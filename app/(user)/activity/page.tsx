@@ -6,7 +6,7 @@ export default function ActivityPage() {
   return (
     <Tabs
       defaultValue="saved-recipes"
-      className="max-w-6xl mx-auto my-3 md:my-6 lg:my-12"
+      className="max-w-7xl mx-auto my-3 md:my-6 lg:my-12"
     >
       <TabsList className=" p-1 mb-8" variant="line">
         <TabsTrigger value="saved-recipes">

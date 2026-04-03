@@ -14,6 +14,7 @@ import {
   GearSixIcon,
   SignOutIcon,
 } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 interface AvatarButtonProps {
   profile?: {
@@ -30,7 +31,7 @@ const AvatarButton = ({ profile }: AvatarButtonProps) => {
         alt={profile.fullName || "Profile"}
         width={38}
         height={38}
-        className="rounded-full object-cover ring-2 ring-primary shadow-sm hover:ring-primary/50 transition-all duration-200 cursor-pointer"
+        className="rounded-full object-cover ring-2 ring-primary shadow-sm hover:ring-primary/50 transition-all duration-200 cursor-pointer h-10 w-10"
       />
     );
   }
@@ -75,7 +76,7 @@ export const ProfileDropdown = () => {
                 alt="Profile"
                 width={36}
                 height={36}
-                className="rounded-full object-cover"
+                className="rounded-full object-cover h-8 w-8"
               />
             )}
           </div>
@@ -118,10 +119,12 @@ export const ProfileDropdown = () => {
         <DropdownMenuSeparator className="my-1" />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm cursor-pointer hover:bg-accent focus:bg-accent">
-            <GearSixIcon size={32} className="shrink-0" weight="bold" />
-            <span>Settings</span>
-          </DropdownMenuItem>
+          <Link href="/settings" className="w-full">
+            <DropdownMenuItem className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm cursor-pointer hover:bg-accent focus:bg-accent">
+              <GearSixIcon size={32} className="shrink-0" weight="bold" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-1" />

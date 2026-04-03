@@ -8,7 +8,6 @@ import {
   BookmarkSimpleIcon,
   CarrotIcon,
   ChefHatIcon,
-  ClockIcon,
   EyeIcon,
   HeartIcon,
   TagIcon,
@@ -134,7 +133,7 @@ export const CompactRecipeCard = ({
             </span>
           )}
           {recipe.recipeId?.tags?.length > 0 && (
-            <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 capitalize">
               <TagIcon className="w-3.5 h-3.5" weight="fill" />
               {recipe.recipeId.tags
                 .slice(0, 2)

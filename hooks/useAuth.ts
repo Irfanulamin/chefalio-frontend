@@ -35,6 +35,16 @@ interface Profile {
   profile_url: string;
 }
 
+interface UpdateUserPayload {
+  fullName?: string;
+  image?: File[]; // this will be a File object or URL string
+}
+
+interface changePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export function useAuth() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -98,6 +108,12 @@ export function useAuth() {
     onError: () => {},
   });
 
+  const changePasswordMutation = useMutation({
+    mutationFn: (data: changePasswordPayload) =>
+      axiosInstance.post("/auth/change-password", data),
+    onSuccess: () => {},
+  });
+
   const { data: profileData, isLoading: isProfileLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: () =>
@@ -106,6 +122,33 @@ export function useAuth() {
         .then((response) => response.data),
     retry: false,
     staleTime: Infinity,
+  });
+
+  const updateMeMutation = useMutation({
+    mutationFn: (payload: UpdateUserPayload) => {
+      const formData = new FormData();
+
+      if (payload.fullName) {
+        formData.append("fullName", payload.fullName);
+      }
+
+      if (payload.image && payload.image.length > 0) {
+        formData.append("image", payload.image[0]);
+      }
+
+      return axiosInstance
+        .patch<Profile>("/users/update/me", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => response.data);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(["profile"], data);
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+    onError: () => {},
   });
 
   return {
@@ -120,5 +163,8 @@ export function useAuth() {
     resetPassword: resetPasswordMutation.mutateAsync,
     profile: profileData,
     isProfileLoading,
+    updateProfile: updateMeMutation.mutateAsync,
+    isUpdatingProfile: updateMeMutation.isPending,
+    changePassword: changePasswordMutation.mutateAsync,
   };
 }

@@ -127,7 +127,7 @@ export default function RecipesPage() {
   }
 
   return (
-    <div className="space-y-6 my-3 md:my-6 lg:my-12">
+    <div className="space-y-6 my-3 md:my-6 lg:my-12 max-w-7xl mx-auto px-3">
       {/* ── FILTERS ── */}
       <RecipeFilters
         DIFFICULTIES={DIFFICULTIES}

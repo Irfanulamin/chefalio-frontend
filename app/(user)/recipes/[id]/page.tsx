@@ -72,7 +72,7 @@ function RecipeDetail({ recipe }: { recipe: Recipe }) {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-8 items-stretch">
+      <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-8 items-stretch">
         {/* ================= LEFT COLUMN ================= */}
         <div className="lg:flex-1 flex flex-col w-full lg:w-120">
           <ImageCarousel
