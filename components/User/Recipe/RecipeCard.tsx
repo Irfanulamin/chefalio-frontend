@@ -43,7 +43,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
   return (
     <div
-      className="group w-full max-w-sm overflow-hidden rounded-2xl 
+      className="group w-full max-w-full overflow-hidden rounded-2xl 
 border border-blue-200/40 dark:border-blue-400/20 
 bg-linear-to-br from-white/60 via-blue-50/40 to-blue-100/30 
 dark:from-black/80 dark:via-blue-900/20 dark:to-black/30
