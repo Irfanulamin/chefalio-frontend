@@ -58,7 +58,6 @@ export const RecipeCard = memo(({ recipe }: { recipe: Recipe }) => {
 border border-blue-200/40 dark:border-blue-400/20 
 bg-linear-to-br from-white/60 via-blue-50/40 to-blue-100/30 
 dark:from-black/80 dark:via-blue-900/20 dark:to-black/30
-backdrop-blur-xl backdrop-saturate-150
 shadow-[0_10px_30px_rgba(59,130,246,0.15)] 
 dark:shadow-[0_10px_30px_rgba(59,130,246,0.10)]
 transition-all duration-300 
