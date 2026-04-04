@@ -14,24 +14,35 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
+import { memo, useCallback } from "react";
 
-export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+// ✅ Moved outside component — no re-creation on every render
+const difficultyColors: Record<string, string> = {
+  beginner:
+    "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
+  intermediate:
+    "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
+  advance: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100",
+};
+
+// ✅ Wrapped with memo — skips re-render if recipe prop hasn't changed
+export const RecipeCard = memo(({ recipe }: { recipe: Recipe }) => {
   const { stats } = useRecipeStats(recipe._id);
   const { mutate: toggleSave } = useToggleSave();
   const { mutate: toggleLove } = useToggleLove();
 
-  const difficultyColors = {
-    beginner:
-      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-100",
-    intermediate:
-      "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
-    advance: "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100",
-  };
+  // ✅ Stable callbacks — not re-created every render
+  const handleLoveToggle = useCallback(
+    () => toggleLove(recipe._id),
+    [recipe._id, toggleLove],
+  );
 
-  const handleLoveToggle = () => toggleLove(recipe._id);
-  const handleSaveToggle = () => toggleSave(recipe._id);
+  const handleSaveToggle = useCallback(
+    () => toggleSave(recipe._id),
+    [recipe._id, toggleSave],
+  );
 
-  const handleShareLinkToClipboard = () => {
+  const handleShareLinkToClipboard = useCallback(() => {
     const url = `${window.location.origin}/recipes/${recipe._id}`;
     navigator.clipboard.writeText(url);
     if (navigator.share) {
@@ -39,7 +50,7 @@ export const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
         .share({ title: recipe.title, text: recipe.description, url })
         .catch(() => undefined);
     }
-  };
+  }, [recipe._id, recipe.title, recipe.description]);
 
   return (
     <div
@@ -62,6 +73,8 @@ flex flex-col"
           src={recipe.images[0]}
           alt={recipe.title}
           fill
+          loading="lazy"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
@@ -88,6 +101,8 @@ flex flex-col"
               alt={recipe.author.fullName}
               width={28}
               height={28}
+              loading="lazy"
+              sizes="28px"
               className="rounded-full"
             />
           ) : (
@@ -194,4 +209,6 @@ flex flex-col"
       </div>
     </div>
   );
-};
+});
+
+RecipeCard.displayName = "RecipeCard";
