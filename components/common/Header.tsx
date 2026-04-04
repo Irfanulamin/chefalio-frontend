@@ -34,26 +34,24 @@ const NAV_LINKS = [
 
 interface DesktopAuthProps {
   user: AuthUser;
-  isLoading: boolean;
   logout: () => void;
   router: ReturnType<typeof useRouter>;
 }
 
-const DesktopAuth = ({ user, isLoading, router }: DesktopAuthProps) => {
-  if (isLoading) {
-    // Skeleton placeholder to prevent layout shift
-    return <div className="h-9 w-28 rounded-md bg-muted animate-pulse" />;
-  }
-
+const DesktopAuth = ({ user, router }: DesktopAuthProps) => {
+  // If we KNOW user is logged in → show immediately
   if (user) {
     return <ProfileDropdown />;
   }
 
+  // If still loading, but no user yet → still show guest UI
+  // (this avoids layout shift + avoids loading UI)
   return (
     <div className="flex items-center gap-2">
       <Button variant="outline" size="lg" onClick={() => router.push("/login")}>
         Login
       </Button>
+
       <Button size="lg" onClick={() => router.push("/register")}>
         Register
       </Button>
@@ -223,12 +221,7 @@ export const Header = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.42, duration: 0.35 }}
               >
-                <DesktopAuth
-                  user={user}
-                  isLoading={isLoading}
-                  logout={logout}
-                  router={router}
-                />
+                <DesktopAuth user={user} logout={logout} router={router} />
               </motion.div>
             </nav>
 
