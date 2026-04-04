@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { DM_Sans, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
 import { twMerge } from "tailwind-merge";
@@ -7,6 +7,12 @@ import { MainLayoutProvider } from "../components/providers/MainLayoutProvider";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
+  subsets: ["latin"],
+});
+
+const pinyonScript = Pinyon_Script({
+  variable: "--font-pinyon",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -24,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={twMerge(dmSans.className, "antialiased")}
+      className={twMerge(pinyonScript.variable, dmSans.variable, "antialiased")}
       suppressHydrationWarning
     >
       <body>

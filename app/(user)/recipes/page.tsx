@@ -54,7 +54,7 @@ export default function RecipesPage() {
   const { recipes, isLoading, isFetching } = useRecipes({
     search: debouncedSearch,
     page,
-    limit: 12,
+    limit: 6,
     tags: tagsParam || undefined,
     difficulty: difficulty || undefined,
     author: debouncedAuthor || undefined,
@@ -127,7 +127,18 @@ export default function RecipesPage() {
   }
 
   return (
-    <div className="space-y-6 my-3 md:my-6 lg:my-12 max-w-7xl mx-auto px-3">
+    <div className="space-y-6 my-3 md:my-6 max-w-7xl mx-auto px-3">
+      <div>
+        <h2 className="text-5xl font-pinyon-script font-bold text-primary italic capitalize mb-2 tracking-widest">
+          Recipes
+        </h2>
+        <p className="text-muted-foreground max-w-200">
+          Discover delicious recipes tailored to your taste and dietary
+          preferences. Use the filters to find the perfect meal for any
+          occasion, whether you&apos;re a beginner or a seasoned chef. Happy
+          cooking!
+        </p>
+      </div>
       {/* ── FILTERS ── */}
       <RecipeFilters
         DIFFICULTIES={DIFFICULTIES}

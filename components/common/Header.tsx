@@ -15,41 +15,83 @@ import {
 import { useAuth } from "@/hooks/axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ProfileDropdown } from "./ProfileDropdown";
 
-const navLinks = [
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type AuthUser = ReturnType<typeof useAuth>["user"];
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Features", href: "/#features" },
   { label: "About", href: "/#about" },
   { label: "FAQ", href: "/#faq" },
-];
+] as const;
 
-// shared so both desktop and mobile render the same thing
+// ─── Desktop Auth ─────────────────────────────────────────────────────────────
 
-const AuthButtons = ({
-  fullWidth = false,
-  isLoading,
-  user,
-  logout,
-  onNavigate,
-  router,
-}: {
-  fullWidth?: boolean;
+interface DesktopAuthProps {
+  user: AuthUser;
   isLoading: boolean;
-  user: unknown;
   logout: () => void;
-  onNavigate?: () => void;
   router: ReturnType<typeof useRouter>;
-}) => {
-  // If user exists → show logout
-  if (user && !isLoading) {
+}
+
+const DesktopAuth = ({ user, isLoading, router }: DesktopAuthProps) => {
+  if (isLoading) {
+    // Skeleton placeholder to prevent layout shift
+    return <div className="h-9 w-28 rounded-md bg-muted animate-pulse" />;
+  }
+
+  if (user) {
+    return <ProfileDropdown />;
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Button variant="outline" size="lg" onClick={() => router.push("/login")}>
+        Login
+      </Button>
+      <Button size="lg" onClick={() => router.push("/register")}>
+        Register
+      </Button>
+    </div>
+  );
+};
+
+// ─── Mobile Auth ──────────────────────────────────────────────────────────────
+
+interface MobileAuthProps {
+  user: AuthUser;
+  isLoading: boolean;
+  logout: () => void;
+  router: ReturnType<typeof useRouter>;
+  onClose: () => void;
+}
+
+const MobileAuth = ({
+  user,
+  isLoading,
+  logout,
+  router,
+  onClose,
+}: MobileAuthProps) => {
+  if (isLoading) {
+    return <div className="h-11 w-full rounded-md bg-muted animate-pulse" />;
+  }
+
+  if (user) {
     return (
       <Button
         variant="outline"
         size="lg"
-        className={fullWidth ? "w-full" : ""}
+        className="w-full"
         onClick={() => {
           logout();
-          onNavigate?.();
+          router.push("/");
+          onClose();
         }}
       >
         Logout
@@ -57,26 +99,25 @@ const AuthButtons = ({
     );
   }
 
-  // Default (loading OR no user) → show guest actions
   return (
     <>
       <Button
         variant="outline"
         size="lg"
-        className={fullWidth ? "w-full" : ""}
+        className="w-full"
         onClick={() => {
           router.push("/login");
-          onNavigate?.();
+          onClose();
         }}
       >
         Login
       </Button>
       <Button
         size="lg"
-        className={fullWidth ? "w-full" : ""}
+        className="w-full"
         onClick={() => {
           router.push("/register");
-          onNavigate?.();
+          onClose();
         }}
       >
         Register
@@ -85,14 +126,19 @@ const AuthButtons = ({
   );
 };
 
+// ─── Header ───────────────────────────────────────────────────────────────────
+
 export const Header = () => {
   const router = useRouter();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(true);
   const { user, isLoading, logout } = useAuth();
 
+  const closeSheet = () => setSheetOpen(false);
+
   return (
     <div className="sticky top-0 z-50 backdrop-blur-sm">
+      {/* ── Promo Banner ── */}
       <AnimatePresence>
         {bannerVisible && (
           <motion.div
@@ -100,14 +146,15 @@ export const Header = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -40, opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative flex flex-col sm:flex-row justify-center sm:justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
+            className="relative flex flex-col sm:flex-row justify-center items-center py-2.5 dark:bg-primary bg-black text-white dark:text-black text-sm gap-1.5 font-medium tracking-wide"
           >
             <Link
               href="/login"
-              className="text-center sm:text-left hover:underline "
+              className="text-center sm:text-left hover:underline"
             >
-              Try it free, no credit card required!{" "}
+              Try it free, no credit card required!
             </Link>
+
             <motion.span
               animate={{ x: [0, 4, 0] }}
               transition={{
@@ -119,6 +166,7 @@ export const Header = () => {
             >
               <ArrowRightIcon size={16} />
             </motion.span>
+
             <motion.button
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.9 }}
@@ -132,6 +180,7 @@ export const Header = () => {
         )}
       </AnimatePresence>
 
+      {/* ── Main Nav Bar ── */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -140,17 +189,21 @@ export const Header = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
-            <motion.h2
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              className="text-primary text-2xl font-extrabold tracking-tight cursor-pointer select-none"
-            >
-              <Link href="/">Chefalio</Link>
-            </motion.h2>
+            {/* Logo */}
+            <motion.div whileTap={{ scale: 0.97 }}>
+              <Link
+                href="/"
+                className="text-primary text-2xl font-extrabold tracking-tight select-none"
+              >
+                Chefalio
+              </Link>
+            </motion.div>
 
-            {/* Desktop */}
-            <nav className="hidden lg:flex gap-x-7 gap-y-4 text-muted-foreground items-center">
+            {/* ── Desktop Nav ── */}
+            <nav className="hidden lg:flex gap-x-7 items-center text-muted-foreground">
               <ToggleThemeButton />
-              {navLinks.map((link, i) => (
+
+              {NAV_LINKS.map((link, i) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
@@ -164,25 +217,28 @@ export const Header = () => {
                   <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
                 </motion.a>
               ))}
+
               <motion.div
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.42, duration: 0.35 }}
-                className="flex items-center gap-2"
               >
-                <AuthButtons
-                  isLoading={isLoading}
+                <DesktopAuth
                   user={user}
+                  isLoading={isLoading}
                   logout={logout}
                   router={router}
-                />{" "}
-                {/* 👈 */}
+                />
               </motion.div>
             </nav>
 
-            {/* Mobile */}
+            {/* ── Mobile Nav ── */}
             <div className="lg:hidden flex items-center gap-3">
               <ToggleThemeButton />
+
+              {/* Only show ProfileDropdown when authenticated */}
+              {!isLoading && user && <ProfileDropdown />}
+
               <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                 <SheetTrigger asChild>
                   <motion.button
@@ -228,7 +284,7 @@ export const Header = () => {
                   </SheetHeader>
 
                   <nav className="flex flex-col px-6 mt-2 gap-1">
-                    {navLinks.map((link, i) => (
+                    {NAV_LINKS.map((link, i) => (
                       <motion.a
                         key={link.label}
                         href={link.href}
@@ -239,7 +295,7 @@ export const Header = () => {
                           duration: 0.3,
                           ease: "easeOut",
                         }}
-                        onClick={() => setSheetOpen(false)}
+                        onClick={closeSheet}
                         className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors"
                       >
                         {link.label}
@@ -253,16 +309,12 @@ export const Header = () => {
                     transition={{ delay: 0.28, duration: 0.3 }}
                     className="flex flex-col gap-3 px-6 mt-6"
                   >
-                    <AuthButtons
-                      fullWidth
-                      isLoading={isLoading}
+                    <MobileAuth
                       user={user}
-                      logout={() => {
-                        logout();
-                        setSheetOpen(false);
-                      }}
-                      onNavigate={() => setSheetOpen(false)}
+                      isLoading={isLoading}
+                      logout={logout}
                       router={router}
+                      onClose={closeSheet}
                     />
                   </motion.div>
                 </SheetContent>

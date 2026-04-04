@@ -33,6 +33,7 @@ interface Profile {
   username: string;
   email: string;
   profile_url: string;
+  role: string;
 }
 
 interface UpdateUserPayload {

@@ -30,6 +30,7 @@ export interface Author {
   username: string;
   email: string;
   userId: string;
+  image: string;
 }
 
 export interface Instruction {

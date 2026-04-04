@@ -6,9 +6,12 @@ html {
   scroll-behavior: smooth;
 }
 
-
-
 @custom-variant dark (&:is(.dark *));
+
+body {
+  font-family: var(--font-dm-sans, ui-sans-serif, system-ui, sans-serif);
+}
+
 
 @theme inline {
   --color-background: var(--background);
@@ -34,6 +37,10 @@ html {
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
+
+  /* fonts */
+  --font-sans: var(--font-dm-sans);      /* default font-sans => DM Sans */
+  --font-pinyon-script: var(--font-pinyon); /* use with class: font-pinyon-script */
 }
 
 body {
@@ -95,5 +102,3 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-

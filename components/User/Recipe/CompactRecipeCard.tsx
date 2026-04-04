@@ -6,9 +6,9 @@ import {
 import { SavedRecipe } from "@/types/recipes.type";
 import {
   BookmarkSimpleIcon,
-  CarrotIcon,
   ChefHatIcon,
   EyeIcon,
+  ForkKnifeIcon,
   HeartIcon,
   TagIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -73,13 +73,13 @@ export const CompactRecipeCard = ({
       className="group relative flex items-start gap-4 px-5 py-4 bg-white dark:bg-slate-950/50 border border-slate-200/50 dark:border-slate-800/50 rounded-lg hover:border-slate-300/70 dark:hover:border-slate-700/70 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.3)] transition-all duration-200"
     >
       {/* Thumbnail */}
-      <div className="shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
+      <div className="shrink-0 w-36 h-36 rounded-lg overflow-hidden bg-linear-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
         {recipe.recipeId?.images?.[0] ? (
           <Image
             src={recipe.recipeId.images[0]}
             alt={recipe.recipeId?.title ?? "Recipe image"}
-            width={64}
-            height={64}
+            width={200}
+            height={200}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
             crossOrigin="anonymous"
             loading="eager"
@@ -95,7 +95,7 @@ export const CompactRecipeCard = ({
       <div className="flex-1 min-w-0">
         {/* Title + Badge */}
         <div className="flex items-center gap-2 mb-2 flex-wrap">
-          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-50 truncate">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50 truncate">
             {recipe.recipeId?.title ?? "Untitled Recipe"}
           </h2>
           {difficulty && (
@@ -109,17 +109,26 @@ export const CompactRecipeCard = ({
 
         {/* Author */}
         <div className="flex items-center gap-1.5 mb-2">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 dark:bg-slate-700/80 text-[10px] font-semibold text-slate-700 dark:text-slate-200 shrink-0">
-            {initials}
-          </span>
-          <span className="text-xs text-slate-600 dark:text-slate-300 truncate">
+          {recipe.recipeId?.author?.image ? (
+            <Image
+              src={recipe.recipeId.author.image}
+              alt={recipe.recipeId.author.fullName}
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-full object-cover "
+            />
+          ) : (
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700/80 text-[10px] font-semibold text-slate-700 dark:text-slate-200 shrink-0">
+              {initials}
+            </span>
+          )}
+          <p className="text-sm text-slate-600 dark:text-slate-300 truncate capitalize">
             {recipe.recipeId?.author?.fullName ?? "Unknown author"}
-          </span>
+          </p>
         </div>
-
         {/* Description */}
         {recipe.recipeId?.description && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-1 mb-2">
+          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-2">
             {recipe.recipeId.description}
           </p>
         )}
@@ -127,14 +136,14 @@ export const CompactRecipeCard = ({
         {/* Meta Row */}
         <div className="flex items-center gap-3 flex-wrap">
           {recipe.recipeId?.ingredients?.length != null && (
-            <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
-              <CarrotIcon className="w-3.5 h-3.5" weight="fill" />
+            <span className="inline-flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
+              <ForkKnifeIcon className="w-5 h-5 text-primary" weight="fill" />
               {recipe.recipeId.ingredients.length} ingredients
             </span>
           )}
           {recipe.recipeId?.tags?.length > 0 && (
             <span className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 capitalize">
-              <TagIcon className="w-3.5 h-3.5" weight="fill" />
+              <TagIcon className="w-5 h-5 text-blue-500" weight="fill" />
               {recipe.recipeId.tags
                 .slice(0, 2)
                 .map((tag) => `#${tag}`)
@@ -189,17 +198,9 @@ export const CompactRecipeCard = ({
           aria-label={
             stats?.isLoved ? "Unlike this recipe" : "Like this recipe"
           }
-          className={`p-1.5 rounded-lg transition-all duration-150 disabled:opacity-50 ${
-            stats?.isLoved
-              ? "bg-green-500/10 text-primary dark:bg-accent hover:bg-green-500/20 "
-              : "text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:text-slate-300 dark:hover:bg-slate-800"
-          }`}
+          className={`p-1.5 rounded-lg transition-all duration-150 disabled:opacity-50 bg-green-500/10 text-primary dark:bg-accent hover:bg-green-500/20 `}
         >
-          <EyeIcon
-            className="w-4.5 h-4.5"
-            weight={stats?.isLoved ? "fill" : "bold"}
-            strokeWidth={2}
-          />
+          <EyeIcon className="w-4.5 h-4.5" weight="bold" strokeWidth={2} />
         </Link>
       </div>
     </article>

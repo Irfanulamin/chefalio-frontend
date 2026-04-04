@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet";
 //import { useAuth } from "@/hooks/axios";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ProfileDropdown } from "./ProfileDropdown";
 
 const navLinks = [
@@ -22,6 +23,7 @@ const navLinks = [
 
 export const UserHeader = () => {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const pathname = usePathname();
   //const { user, isLoading, logout } = useAuth();
 
   return (
@@ -36,22 +38,28 @@ export const UserHeader = () => {
             {/* Desktop */}
             <nav className="hidden lg:flex gap-x-7 gap-y-4 text-muted-foreground items-center">
               <ToggleThemeButton />
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-sm font-medium relative group transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-primary transition-all duration-300 group-hover:w-full" />
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`text-sm font-medium relative group transition-colors hover:text-foreground ${isActive ? "text-foreground" : ""}`}
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute -bottom-0.5 left-0 h-px bg-primary transition-all duration-300 ${isActive ? "w-full" : "w-0 group-hover:w-full"}`}
+                    />
+                  </Link>
+                );
+              })}
               <ProfileDropdown />
             </nav>
 
             {/* Mobile */}
             <div className="lg:hidden flex items-center gap-3">
               <ToggleThemeButton />
+              <ProfileDropdown />
               <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                 <SheetTrigger asChild>
                   <button
@@ -83,16 +91,19 @@ export const UserHeader = () => {
                   </SheetHeader>
 
                   <nav className="flex flex-col px-6 mt-2 gap-1">
-                    {navLinks.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        onClick={() => setSheetOpen(false)}
-                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground border-b border-border/40 last:border-none transition-colors"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
+                    {navLinks.map((link) => {
+                      const isActive = pathname === link.href;
+                      return (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          onClick={() => setSheetOpen(false)}
+                          className={`py-3 text-base font-medium border-b border-border/40 last:border-none transition-colors ${isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                        >
+                          {link.label}
+                        </Link>
+                      );
+                    })}
                   </nav>
                 </SheetContent>
               </Sheet>

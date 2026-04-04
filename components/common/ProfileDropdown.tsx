@@ -11,6 +11,7 @@ import Image from "next/image";
 import {
   AtIcon,
   EnvelopeIcon,
+  ForkKnifeIcon,
   GearSixIcon,
   SignOutIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -125,6 +126,19 @@ export const ProfileDropdown = () => {
               <span>Settings</span>
             </DropdownMenuItem>
           </Link>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator className="my-1" />
+
+        <DropdownMenuGroup>
+          {profile?.role === "user" && (
+            <Link href="/recipes" className="w-full">
+              <DropdownMenuItem className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm cursor-pointer hover:bg-accent focus:bg-accent">
+                <ForkKnifeIcon size={32} className="shrink-0" weight="bold" />
+                <span>Recipes</span>
+              </DropdownMenuItem>
+            </Link>
+          )}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className="my-1" />
