@@ -6,29 +6,7 @@ import {
   BookmarkSimpleIcon,
   ChefHatIcon,
 } from "@phosphor-icons/react/dist/ssr";
-
-function SkeletonCard() {
-  return (
-    <div className="flex gap-5 px-6 py-5 animate-pulse">
-      <div className="shrink-0 w-20 h-20 rounded-xl bg-slate-200 dark:bg-slate-700" />
-      <div className="flex-1 space-y-3 py-1">
-        <div className="flex items-center gap-3">
-          <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/5" />
-          <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded-full w-20" />
-        </div>
-        <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-3/4" />
-        <div className="flex gap-2">
-          <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-24" />
-          <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-16" />
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-700" />
-        <div className="w-9 h-9 rounded-xl bg-slate-200 dark:bg-slate-700" />
-      </div>
-    </div>
-  );
-}
+import { CompactRecipeSkeletonCard } from "@/components/User/Recipe/CompactRecipeSkeletonCard";
 
 export default function SavedRecipesSection() {
   const { savedRecipes, isLoading, isFetching, error } = useSavedRecipes();
@@ -38,7 +16,7 @@ export default function SavedRecipesSection() {
       <section>
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
           {Array.from({ length: 2 }).map((_, i) => (
-            <SkeletonCard key={i} />
+            <CompactRecipeSkeletonCard key={i} />
           ))}
         </div>
       </section>

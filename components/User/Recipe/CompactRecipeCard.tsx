@@ -128,13 +128,13 @@ export const CompactRecipeCard = ({
         </div>
         {/* Description */}
         {recipe.recipeId?.description && (
-          <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-2">
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-2">
             {recipe.recipeId.description}
           </p>
         )}
 
         {/* Meta Row */}
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="hidden md:flex items-center gap-3 flex-wrap">
           {recipe.recipeId?.ingredients?.length != null && (
             <span className="inline-flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
               <ForkKnifeIcon className="w-5 h-5 text-primary" weight="fill" />
@@ -154,7 +154,7 @@ export const CompactRecipeCard = ({
       </div>
 
       {/* Actions */}
-      <div className="shrink-0 flex items-center gap-2 self-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div className="shrink-0 flex items-center gap-2 self-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         {button == "love" && (
           <button
             onClick={() => handleLoveToggle()}

@@ -1,5 +1,6 @@
 "use client";
 
+import { ShieldSlashIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -91,29 +92,27 @@ export default function UnauthorizedPage() {
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* NAV */}
         <nav className="flex items-center justify-between px-6 md:px-12 py-5 backdrop-blur-md border-b border-white/10 bg-black/40">
-          <Link href="/" className="font-bold tracking-tight text-lg">
+          <Link
+            href="/"
+            className="font-bold tracking-tight text-lg text-primary"
+          >
             Chefalio
           </Link>
-
-          <div className="flex items-center gap-2 px-4 py-1 rounded-full text-xs border border-primary bg-accent text-green-300">
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            ACCESS DENIED
-          </div>
         </nav>
 
         {/* MAIN */}
         <main className="flex flex-1 items-center justify-center px-6 py-16">
           <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 md:p-14 shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
             {/* lock */}
-            <div className="mx-auto w-16 h-16 flex items-center justify-center rounded-xl bg-accent border border-primary text-2xl mb-6 animate-pulse">
-              🔒
+            <div className="mx-auto w-16 h-16 flex items-center justify-center rounded-xl bg-accent/10 border border-primary text-2xl mb-6 animate-pulse">
+              <ShieldSlashIcon className="w-8 h-8 text-primary" weight="fill" />
             </div>
 
-            <p className="text-center text-green-300 text-xs tracking-widest uppercase mb-3">
+            <p className="text-center text-red-300 text-xs tracking-widest uppercase mb-3">
               Error 401 · Unauthorized
             </p>
 
-            <h1 className="text-center text-3xl md:text-4xl font-bold bg-linear-to-r from-white to-green-300 text-transparent bg-clip-text mb-4">
+            <h1 className="text-center text-3xl md:text-4xl font-bold bg-linear-to-r from-white to-red-300 text-transparent bg-clip-text mb-4">
               Access Restricted
             </h1>
 
@@ -123,7 +122,6 @@ export default function UnauthorizedPage() {
             </p>
 
             <div className="flex items-start gap-3 p-4 rounded-lg border border-red-500/20 bg-red-500/10 mb-8">
-              <span className="w-2 h-2 mt-2 rounded-full bg-red-500" />
               <p className="text-xs text-red-300 leading-relaxed">
                 If you believe this is a mistake, please contact your workspace
                 admin or sign in with the correct account.
@@ -133,16 +131,9 @@ export default function UnauthorizedPage() {
             <div className="space-y-3">
               <Link
                 href="/login"
-                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-linear-to-r from-primary to-accent text-white text-sm font-medium shadow-lg hover:scale-[1.02] transition"
+                className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-linear-to-r from-primary to-accent text-black text-sm font-medium shadow-lg hover:scale-[1.02] transition"
               >
                 Sign in to continue →
-              </Link>
-
-              <Link
-                href="/"
-                className="w-full flex items-center justify-center px-5 py-3 rounded-xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 transition"
-              >
-                ← Back to home
               </Link>
             </div>
           </div>
